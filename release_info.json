@@ -1,0 +1,6 @@
+{
+    "url":  "https://github.com/Toropyga/pogoda_by/releases/new?tag=v0.1.2",
+    "title":  "Pogoda.by v0.1.2",
+    "body":  "## Release v0.1.2\n\nGitHub Actions CI/CD workflow added, MIT License, and enhanced README organization.\n\n### What\u0027s New\n\n- **GitHub Actions CI/CD workflow** — Automated testing on Python 3.11 and 3.12 on every commit and pull request\n- **MIT License** — Proper open-source licensing for distribution\n- **Enhanced README organization** — Installation and configuration buttons moved to appropriate sections in all 4 languages\n\n### Technical Details\n\n- **CI/CD**: Tests run automatically on every push and PR\n- **License**: MIT (see [LICENSE](https://github.com/Toropyga/pogoda_by/blob/master/LICENSE))\n- **Python versions tested**: 3.11, 3.12\n\n### Test Results\n\n- All 36 existing tests continue to pass\n- GitHub Actions validates syntax and runs full test suite\n\n### Installation\n\n**Marketplace (Home Assistant 2026.11+):**\nSettings > Marketplace > Add from link > https://github.com/Toropyga/pogoda_by\n\n**HACS (Earlier versions):**\nHACS > Custom repositories > Add https://github.com/Toropyga/pogoda_by as **Integration**\n\n---\n\nSee [CHANGELOG.md](https://github.com/Toropyga/pogoda_by/blob/master/CHANGELOG.md) for full details.",
+    "tag":  "v0.1.2"
+}

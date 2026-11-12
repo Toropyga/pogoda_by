@@ -17,7 +17,7 @@ def keys(value, prefix=""):
 
 class BundleTests(unittest.TestCase):
     def test_manifest(self):
-        manifest = json.loads((COMPONENT / "manifest.json").read_text(encoding="utf-8"))
+        manifest = json.loads((COMPONENT / "manifest.json").read_text(encoding="utf-8-sig"))
         self.assertEqual(manifest["domain"], "pogoda_by")
         self.assertTrue(manifest["config_flow"])
         self.assertEqual(manifest["iot_class"], "cloud_polling")
