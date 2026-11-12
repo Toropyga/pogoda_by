@@ -2,6 +2,12 @@
 
 [Русский](README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md)
 
+[![Установка через HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
+[![Добавить интеграцию](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=pogoda_by)
+
+Первая кнопка открывает репозиторий в HACS. После установки файлов используйте вторую кнопку, чтобы добавить Pogoda.by в Home Assistant и выбрать страну и метеостанцию.
+
+
 Пользовательская интеграция для Home Assistant. Получает фактическую погоду Белгидромета через RSS, а список стран и станций — через JSON API. Ключ API не нужен. Прогноз погоды не предоставляется.
 
 ## Установка через Marketplace / HACS

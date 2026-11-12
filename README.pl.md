@@ -2,6 +2,12 @@
 
 [Русский](README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md)
 
+[![Zainstaluj przez HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
+[![Dodaj integrację](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=pogoda_by)
+
+Pierwszy przycisk otwiera repozytorium w HACS. Po zainstalowaniu plików użyj drugiego przycisku, aby dodać Pogoda.by do Home Assistant i wybrać kraj oraz stację meteorologiczną.
+
+
 Niestandardowa integracja Home Assistant. Pobiera aktualne obserwacje pogodowe z serwisu Belhydromet przez RSS, a listę krajów i stacji — przez API w formacie JSON. Klucz API nie jest wymagany. Integracja nie udostępnia prognozy pogody.
 
 ## Instalacja przez Marketplace / HACS

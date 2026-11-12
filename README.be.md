@@ -2,6 +2,12 @@
 
 [Русский](README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md)
 
+[![Усталяваць праз HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
+[![Дадаць інтэграцыю](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=pogoda_by)
+
+Першая кнопка адкрывае рэпазіторый у HACS. Пасля ўсталявання файлаў скарыстайцеся другой кнопкай, каб дадаць Pogoda.by у Home Assistant і выбраць краіну і метэастанцыю.
+
+
 Карыстальніцкая інтэграцыя для Home Assistant. Атрымлівае фактычнае надвор'е Белгідрамета праз RSS, а спіс краін і станцый — праз JSON API. Ключ API не патрэбны. Прагноз надвор'я не прадастаўляецца.
 
 ## Усталяванне праз Marketplace / HACS
