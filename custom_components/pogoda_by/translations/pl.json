@@ -31,10 +31,10 @@
   "options": {
     "step": {
       "init": {
-        "title": "Ustawienia odświeżania",
-        "description": "W tym odstępie jest wykonywane jedno zapytanie RSS na stację. Sama stacja może publikować pomiary rzadziej.",
+        "title": "Ustawienia aktualizacji",
+        "description": "Dane pogodowe są pobierane jednym zapytaniem RSS dla każdej stacji. Stacja może publikować nowe pomiary rzadziej.",
         "data": {
-          "update_interval": "Odstęp odświeżania (minuty)"
+          "update_interval": "Interwał aktualizacji (minuty)"
         }
       }
     }
