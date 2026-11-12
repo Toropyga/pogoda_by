@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import TypeAlias
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
@@ -11,7 +13,7 @@ from .api import PogodaByClient
 from .coordinator import PogodaByCoordinator
 
 PLATFORMS = [Platform.SENSOR]
-type PogodaByConfigEntry = ConfigEntry[PogodaByCoordinator]
+PogodaByConfigEntry: TypeAlias = ConfigEntry[PogodaByCoordinator]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: PogodaByConfigEntry) -> bool:
