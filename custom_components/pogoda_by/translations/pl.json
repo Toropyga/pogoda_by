@@ -1,0 +1,79 @@
+{
+  "title": "Pogoda.by",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Wybierz kraj",
+        "description": "Wybierz kraj z katalogu Pogoda.by. Jeśli pobieranie się nie powiedzie, wyślij formularz ponownie.",
+        "data": {
+          "country": "Kraj"
+        }
+      },
+      "station": {
+        "title": "Wybierz stację meteorologiczną",
+        "description": "Wybierz stację w kraju {country}. W nawiasach kwadratowych podano identyfikator stacji.",
+        "data": {
+          "station_id": "Stacja meteorologiczna"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Nie można połączyć się z Pogoda.by. Spróbuj ponownie.",
+      "invalid_data": "Katalog stacji jest pusty lub ma nieobsługiwany format.",
+      "no_weather": "Stacja nie udostępnia teraz obsługiwanych danych pogodowych. Spróbuj ponownie lub wybierz inną stację.",
+      "invalid_country": "Wybierz kraj z listy.",
+      "invalid_station": "Wybierz stację z listy."
+    },
+    "abort": {
+      "already_configured": "Ta stacja została już dodana."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Ustawienia aktualizacji",
+        "description": "Dane pogodowe są pobierane jednym zapytaniem RSS dla każdej stacji. Stacja może publikować nowe pomiary rzadziej.",
+        "data": {
+          "update_interval": "Interwał aktualizacji (minuty)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperatura"
+      },
+      "pressure": {
+        "name": "Ciśnienie atmosferyczne"
+      },
+      "pressure_trend": {
+        "name": "Tendencja ciśnienia"
+      },
+      "wind_speed": {
+        "name": "Prędkość wiatru"
+      },
+      "wind_direction": {
+        "name": "Kierunek wiatru"
+      },
+      "condition": {
+        "name": "Pogoda"
+      },
+      "observation_time": {
+        "name": "Czas obserwacji"
+      },
+      "station": {
+        "name": "Stacja meteorologiczna"
+      },
+      "humidity": {
+        "name": "Wilgotność"
+      },
+      "wind_gust": {
+        "name": "Porywy wiatru"
+      },
+      "visibility": {
+        "name": "Widoczność"
+      }
+    }
+  }
+}
