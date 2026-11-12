@@ -1,4 +1,4 @@
-﻿# Pogoda.by для Home Assistant — 0.1.1
+﻿# Pogoda.by для Home Assistant — 0.1.3
 
 [Русский](README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md)
 

@@ -1,12 +1,14 @@
-﻿# Pogoda.by for Home Assistant — 0.1.1
+# Pogoda.by for Home Assistant — 0.1.3
 
 [Русский](README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md)
 
 A custom integration for Home Assistant. Retrieves observed weather from Belhydromet via RSS and the list of countries and stations via a JSON API. No API key is required. Weather forecasts are not provided.
 
+> ⚠️ **Important note:** The integration provides complete information for weather stations **in Belarus**. For stations in other countries, the information is often **unavailable or incomplete**, as the Pogoda.by service is primarily focused on Belhydromet data (Belarus). If you have selected a station from another country and the sensors show an error or become unavailable, this is due to data unavailability from the Pogoda.by service.
+
 ## Installation with Marketplace / HACS
 
-Version **0.1.1** supports installation through Marketplace / HACS from the `Toropyga/pogoda_by` repository.
+Version **0.1.3** supports installation through Marketplace / HACS from the `Toropyga/pogoda_by` repository.
 
 [![Install via HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
 

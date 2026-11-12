@@ -1,12 +1,14 @@
-﻿# Pogoda.by для Home Assistant — 0.1.1
+# Pogoda.by для Home Assistant — 0.1.3
 
 [Русский](README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md)
 
 Карыстальніцкая інтэграцыя для Home Assistant. Атрымлівае фактычнае надвор'е Белгідрамета праз RSS, а спіс краін і станцый — праз JSON API. Ключ API не патрэбны. Прагноз надвор'я не прадастаўляецца.
 
+> ⚠️ **Важнае заўвага:** Інтэграцыя прадастаўляе поўную інфармацыю па метэастанцыям **у Беларусі**. Па станцыям у іншых краінах інфармацыя часто **недаступна або частична**, бо сэрвіс Pogoda.by арыентаваны ў першую чаргу на даныя Белгідрамета (Беларусь). Калі вы выбралі станцыю з іншай краіны і сенсары паказваюць памылку ці становяцца недаступнымі, гэта звязана з недаступнасцю даных ад сэрвіса Pogoda.by.
+
 ## Усталяванне праз Marketplace / HACS
 
-Версія **0.1.1** падтрымлівае ўсталяванне праз Marketplace / HACS з рэпазіторыя `Toropyga/pogoda_by`.
+Версія **0.1.3** падтрымлівае ўсталяванне праз Marketplace / HACS з рэпазіторыя `Toropyga/pogoda_by`.
 
 [![Усталяваць праз HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
 
