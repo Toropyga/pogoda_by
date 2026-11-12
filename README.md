@@ -2,17 +2,13 @@
 
 [Русский](README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md)
 
-[![Установка через HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
-[![Добавить интеграцию](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=pogoda_by)
-
-Первая кнопка открывает репозиторий в HACS. После установки файлов используйте вторую кнопку, чтобы добавить Pogoda.by в Home Assistant и выбрать страну и метеостанцию.
-
-
 Пользовательская интеграция для Home Assistant. Получает фактическую погоду Белгидромета через RSS, а список стран и станций — через JSON API. Ключ API не нужен. Прогноз погоды не предоставляется.
 
 ## Установка через Marketplace / HACS
 
 Версия **0.1.1** поддерживает установку через Marketplace / HACS из репозитория `Toropyga/pogoda_by`.
+
+[![Установка через HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
 
 ### Home Assistant 2026.11 и новее — Marketplace
 
@@ -50,6 +46,8 @@ Marketplace и HACS размещают файлы в `/config/custom_components/
 3. Выполните настройку, описанную ниже.
 
 ## Настройка после установки
+
+[![Добавить интеграцию](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=pogoda_by)
 
 1. Откройте **Настройки → Устройства и службы → Добавить интеграцию → Pogoda.by**.
 2. Выберите страну из справочника, затем станцию из списка этой страны. В подписи станции указан её действительный ID, а не номер строки в JSON.

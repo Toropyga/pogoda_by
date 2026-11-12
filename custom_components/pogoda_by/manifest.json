@@ -1,12 +1,16 @@
-{
-  "domain": "pogoda_by",
-  "name": "Pogoda.by",
-  "codeowners": ["@Toropyga"],
-  "config_flow": true,
-  "documentation": "https://github.com/Toropyga/pogoda_by",
-  "integration_type": "service",
-  "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/Toropyga/pogoda_by/issues",
-  "requirements": [],
-  "version": "0.1.1"
+﻿{
+    "domain":  "pogoda_by",
+    "name":  "Pogoda.by",
+    "codeowners":  [
+                       "@Toropyga"
+                   ],
+    "config_flow":  true,
+    "documentation":  "https://github.com/Toropyga/pogoda_by",
+    "integration_type":  "service",
+    "iot_class":  "cloud_polling",
+    "issue_tracker":  "https://github.com/Toropyga/pogoda_by/issues",
+    "requirements":  [
+
+                     ],
+    "version":  "0.1.2"
 }

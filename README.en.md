@@ -2,17 +2,13 @@
 
 [Русский](README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md)
 
-[![Install via HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
-[![Add integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=pogoda_by)
-
-The first button opens the repository in HACS. After installing the files, use the second button to add Pogoda.by to Home Assistant and select a country and weather station.
-
-
 A custom integration for Home Assistant. Retrieves observed weather from Belhydromet via RSS and the list of countries and stations via a JSON API. No API key is required. Weather forecasts are not provided.
 
 ## Installation with Marketplace / HACS
 
 Version **0.1.1** supports installation through Marketplace / HACS from the `Toropyga/pogoda_by` repository.
+
+[![Install via HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
 
 ### Home Assistant 2026.11 and later — Marketplace
 
@@ -50,6 +46,8 @@ If the integration was installed manually, add the same repository to Marketplac
 3. Follow the configuration steps below.
 
 ## Configuration after installation
+
+[![Add integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=pogoda_by)
 
 1. Open **Settings → Devices & services → Add integration → Pogoda.by**.
 2. Select a country from the catalogue, then a station from that country's list. The label includes the actual station ID, rather than its position in the JSON data.
