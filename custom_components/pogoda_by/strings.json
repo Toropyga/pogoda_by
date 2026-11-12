@@ -1,0 +1,79 @@
+{
+  "title": "Pogoda.by",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Select a country",
+        "description": "Choose a country from the live Pogoda.by catalogue. If loading fails, submit again to retry.",
+        "data": {
+          "country": "Country"
+        }
+      },
+      "station": {
+        "title": "Select a weather station",
+        "description": "Select a station in {country}. The number in brackets is the station ID.",
+        "data": {
+          "station_id": "Weather station"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to connect to Pogoda.by. Please try again.",
+      "invalid_data": "The station catalogue has an unsupported format or is empty.",
+      "no_weather": "No supported weather data is currently available for this station. Try again or select another station.",
+      "invalid_country": "Select a country from the list.",
+      "invalid_station": "Select a station from the list."
+    },
+    "abort": {
+      "already_configured": "This station has already been added."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Polling settings",
+        "description": "Fetch one RSS response per station at this interval. The provider may update observations less frequently.",
+        "data": {
+          "update_interval": "Update interval (minutes)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperature"
+      },
+      "pressure": {
+        "name": "Atmospheric pressure"
+      },
+      "pressure_trend": {
+        "name": "Pressure trend"
+      },
+      "wind_speed": {
+        "name": "Wind speed"
+      },
+      "wind_direction": {
+        "name": "Wind direction"
+      },
+      "condition": {
+        "name": "Weather"
+      },
+      "observation_time": {
+        "name": "Observation time"
+      },
+      "station": {
+        "name": "Station"
+      },
+      "humidity": {
+        "name": "Humidity"
+      },
+      "wind_gust": {
+        "name": "Wind gust"
+      },
+      "visibility": {
+        "name": "Visibility"
+      }
+    }
+  }
+}
