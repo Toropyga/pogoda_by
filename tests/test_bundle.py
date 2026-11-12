@@ -31,7 +31,7 @@ class BundleTests(unittest.TestCase):
 
     def test_translations_have_matching_keys(self):
         source = json.loads((COMPONENT / "strings.json").read_text(encoding="utf-8"))
-        for language in ("en", "ru", "pl"):
+        for language in ("en", "ru", "be", "pl"):
             translated = json.loads((COMPONENT / f"translations/{language}.json").read_text(encoding="utf-8"))
             self.assertEqual(keys(source), keys(translated))
             self.assertIn("{country}", translated["config"]["step"]["station"]["description"])
