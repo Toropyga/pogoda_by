@@ -15,6 +15,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.3] — 2026-11-12
+
+### Fixed
+- **UTF-8 BOM in manifest.json** — Removed byte order mark that was causing JSON parsing errors in some environments
+- **Python 3.11 compatibility** — Replaced PEP 695 type alias syntax (`type X = Y`) with `TypeAlias` from `typing` module for compatibility with Python 3.11
+- **JSON parsing in tests** — Updated test_bundle.py to use `utf-8-sig` encoding to handle BOM-prefixed JSON files
+
+### Technical Details
+- **Compatibility**: Verified working with Python 3.11 and 3.12
+- **Tests**: All 36 unit tests pass with GitHub Actions CI/CD
+- **JSON handling**: Improved robustness for manifest and configuration files
+
+---
+
 ## [0.1.2] — 2026-11-12
 
 ### Added
