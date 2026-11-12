@@ -1,4 +1,4 @@
-"""Generate the integration's matching English, Russian and Polish UI strings."""
+"""Generate matching English, Russian, Belarusian and Polish UI strings."""
 
 import json
 from pathlib import Path
@@ -41,11 +41,18 @@ TRANSLATIONS = {
         "Эта метеостанция уже добавлена.", "Настройки обновления", "С этим интервалом выполняется один RSS-запрос на станцию. Сама станция может публиковать наблюдения реже.", "Интервал обновления (минуты)",
         ["Температура", "Атмосферное давление", "Тенденция давления", "Скорость ветра", "Направление ветра", "Погода", "Время наблюдения", "Метеостанция", "Влажность", "Порывы ветра", "Видимость"],
     ),
+    "be": translation(
+        "Выберыце краіну", "Выберыце краіну з даведніка Pogoda.by. Калі не ўдалося загрузіць даведнік, адпраўце форму яшчэ раз.", "Краіна",
+        "Выберыце метэастанцыю", "Выберыце станцыю ў краіне {country}. У квадратных дужках пазначаны ідэнтыфікатар станцыі.", "Метэастанцыя",
+        ["Не ўдалося злучыцца з Pogoda.by. Паўтарыце спробу.", "Даведнік станцый пусты або мае фармат, які не падтрымліваецца.", "Станцыя зараз не вяртае падтрымліваныя даныя пра надвор'е. Паўтарыце спробу або выберыце іншую станцыю.", "Выберыце краіну са спіса.", "Выберыце станцыю са спіса."],
+        "Гэтая метэастанцыя ўжо дададзена.", "Налады абнаўлення", "З гэтым інтэрвалам выконваецца адзін RSS-запыт для кожнай станцыі. Сама станцыя можа публікаваць назіранні радзей.", "Інтэрвал абнаўлення (хвіліны)",
+        ["Тэмпература", "Атмасферны ціск", "Тэндэнцыя ціску", "Хуткасць ветру", "Напрамак ветру", "Надвор'е", "Час назірання", "Метэастанцыя", "Вільготнасць", "Парывы ветру", "Бачнасць"],
+    ),
     "pl": translation(
         "Wybierz kraj", "Wybierz kraj z katalogu Pogoda.by. Jeśli pobieranie się nie powiedzie, wyślij formularz ponownie.", "Kraj",
         "Wybierz stację meteorologiczną", "Wybierz stację w kraju {country}. W nawiasach kwadratowych podano identyfikator stacji.", "Stacja meteorologiczna",
         ["Nie można połączyć się z Pogoda.by. Spróbuj ponownie.", "Katalog stacji jest pusty lub ma nieobsługiwany format.", "Stacja nie udostępnia teraz obsługiwanych danych pogodowych. Spróbuj ponownie lub wybierz inną stację.", "Wybierz kraj z listy.", "Wybierz stację z listy."],
-        "Ta stacja została już dodana.", "Ustawienia odświeżania", "W tym odstępie jest wykonywane jedno zapytanie RSS na stację. Sama stacja może publikować pomiary rzadziej.", "Odstęp odświeżania (minuty)",
+        "Ta stacja została już dodana.", "Ustawienia aktualizacji", "Dane pogodowe są pobierane jednym zapytaniem RSS dla każdej stacji. Stacja może publikować nowe pomiary rzadziej.", "Interwał aktualizacji (minuty)",
         ["Temperatura", "Ciśnienie atmosferyczne", "Tendencja ciśnienia", "Prędkość wiatru", "Kierunek wiatru", "Pogoda", "Czas obserwacji", "Stacja meteorologiczna", "Wilgotność", "Porywy wiatru", "Widoczność"],
     ),
 }
