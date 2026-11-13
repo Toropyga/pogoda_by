@@ -1,9 +1,10 @@
 # Pogoda.by dla Home Assistant — 0.1.4
 
-[Русский](../README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md) | [Deutsch](README.de.md)
+[Русский](README.ru.md) | [English](../README.md) | [Polski](README.pl.md) | [Беларуская](README.be.md) | [Deutsch](README.de.md)
 
 Niestandardowa integracja Home Assistant. Pobiera aktualne obserwacje pogodowe z serwisu Belhydromet przez RSS, a listę krajów i stacji — przez API w formacie JSON. Klucz API nie jest wymagany. Integracja nie udostępnia prognozy pogody.
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/hacs/integration)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 ![Version](https://img.shields.io/badge/version-v0.1.4-blue.svg)
 

@@ -1,132 +1,133 @@
-﻿# Pogoda.by для Home Assistant — 0.1.4
+﻿# Pogoda.by for Home Assistant — 0.1.4
 
-[Русский](README.md) | [English](docs/README.en.md) | [Polski](docs/README.pl.md) | [Беларуская](docs/README.be.md) | [Deutsch](docs/README.de.md)
+[Русский](docs/README.ru.md) | [English](README.md) | [Polski](docs/README.pl.md) | [Беларуская](docs/README.be.md) | [Deutsch](docs/README.de.md)
 
-Пользовательская интеграция для Home Assistant. Получает фактическую погоду Белгидромета через RSS, а список стран и станций — через JSON API. Ключ API не нужен. Прогноз погоды не предоставляется.
+A custom integration for Home Assistant. Retrieves observed weather from Belhydromet via RSS and the list of countries and stations via a JSON API. No API key is required. Weather forecasts are not provided.
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/hacs/integration)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 ![Version](https://img.shields.io/badge/version-v0.1.4-blue.svg)
 
-> ⚠️ **Важное примечание:** Интеграция отдаёт полную информацию по метеостанциям **в Беларуси**. По станциям в других странах информация часто **недоступна или частична**, так как сервис Pogoda.by ориентирован в первую очередь на данные Белгидромета (Беларусь). Если вы выбрали станцию из другой страны и сенсоры показывают ошибку либо становятся недоступны, это связано с недоступностью данных от сервиса Pogoda.by.
+> ⚠️ **Important note:** The integration provides complete information for weather stations **in Belarus**. For stations in other countries, the information is often **unavailable or incomplete**, as the Pogoda.by service is primarily focused on Belhydromet data (Belarus). If you have selected a station from another country and the sensors show an error or become unavailable, this is due to data unavailability from the Pogoda.by service.
 
-## Установка через Marketplace / HACS
+## Installation with Marketplace / HACS
 
-Интеграция поддерживает установку через Marketplace / HACS из репозитория `Toropyga/pogoda_by`.
+The integration supports installation through Marketplace / HACS from the `Toropyga/pogoda_by` repository.
 
-[![Установка через HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
+[![Install via HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
 
-### Home Assistant 2026.11 и новее — Marketplace
+### Home Assistant 2026.11 and later — Marketplace
 
-Начиная с **Home Assistant 2026.11**, HACS встроен в Home Assistant под названием **Marketplace**. Отдельно устанавливать HACS не нужно. Marketplace доступен администраторам в настройках. Pogoda.by пока не входит в общий каталог, поэтому добавьте репозиторий по ссылке.
+Starting with **Home Assistant 2026.11**, HACS is built into Home Assistant as the **Marketplace**. No separate HACS installation is needed. Administrators can access the Marketplace under Settings. Pogoda.by is not yet in the default catalogue, so add its repository from a link.
 
-1. Откройте **Настройки → Marketplace**.
-2. Нажмите **Добавить по ссылке / Add from link**.
-3. Введите `https://github.com/Toropyga/pogoda_by` и нажмите **Добавить / Add**.
-4. Если потребуется, подключите GitHub: он нужен для пользовательских репозиториев. Если тип не определился автоматически, выберите **Integration**.
-5. Откройте **Pogoda.by** и нажмите **Установить / Install**.
-6. Выберите страну и станцию в открывшемся окне настройки. Если Marketplace запросит перезапуск, выполните его, затем перейдите к разделу настройки ниже.
+1. Open **Settings → Marketplace**.
+2. Select **Add from link**.
+3. Enter `https://github.com/Toropyga/pogoda_by` and select **Add**.
+4. Connect GitHub if prompted: custom repositories require a connection. If the content type is not detected automatically, select **Integration**.
+5. Open **Pogoda.by** and select **Install**.
+6. Select a country and station in the configuration flow. If the Marketplace requests a restart, restart first, then follow the configuration section below.
 
-Первая установка может сразу открыть настройку без перезапуска. При обновлении уже установленной интеграции следуйте уведомлению Marketplace о необходимости перезапуска.
+A first installation may open configuration immediately without a restart. When updating an existing installation, follow the Marketplace notification about restarting.
 
-### Home Assistant 2026.10 и старше — HACS
+### Home Assistant 2026.10 and earlier — HACS
 
-На прежних версиях потребуется установленный и настроенный [HACS](https://www.hacs.xyz/). Добавьте интеграцию как пользовательский репозиторий:
+On earlier versions, [HACS](https://www.hacs.xyz/) must already be installed and configured. Add the integration as a custom repository:
 
-1. Откройте **HACS** в Home Assistant.
-2. Нажмите **⋮ → Пользовательские репозитории / Custom repositories**.
-3. Вставьте адрес `https://github.com/Toropyga/pogoda_by`.
-4. Выберите тип **Интеграция / Integration** и нажмите **Добавить / Add**.
-5. Найдите **Pogoda.by**, откройте её и нажмите **Скачать / Download**.
-6. Подтвердите загрузку предлагаемой версии. Если релизы ещё не опубликованы, HACS использует основную ветку репозитория.
-7. Перезапустите Home Assistant и выполните настройку, описанную ниже.
+1. Open **HACS** in Home Assistant.
+2. Select **⋮ → Custom repositories**.
+3. Enter `https://github.com/Toropyga/pogoda_by`.
+4. Select **Integration** as the type and click **Add**.
+5. Find **Pogoda.by**, open it and click **Download**.
+6. Confirm the suggested version. If no releases have been published, HACS uses the repository's default branch.
+7. Restart Home Assistant and follow the configuration steps below.
 
-Marketplace и HACS размещают файлы в `/config/custom_components/pogoda_by/`, включая переводы и папку `brand`. В дальнейшем новые опубликованные версии можно загружать через соответствующий интерфейс.
+Marketplace and HACS place the files in `/config/custom_components/pogoda_by/`, including translations and the `brand` folder. Future published versions can be downloaded through the corresponding interface.
 
-Если интеграция уже установлена вручную, добавьте тот же репозиторий в Marketplace или HACS и установите её поверх существующих файлов. Удалять запись Pogoda.by в «Устройства и службы» для смены способа установки не требуется.
+If the integration was installed manually, add the same repository to Marketplace or HACS and install it over the existing files. There is no need to delete the Pogoda.by entry from Devices & services when changing the installation method.
 
-## Ручная установка
+## Manual installation
 
-1. Скопируйте папку `custom_components/pogoda_by` из этого проекта в каталог конфигурации Home Assistant. Итоговый путь должен быть `/config/custom_components/pogoda_by/manifest.json`.
-2. Перезапустите Home Assistant.
-3. Выполните настройку, описанную ниже.
+1. Copy the `custom_components/pogoda_by` folder from this project to your Home Assistant configuration directory. The resulting path must be `/config/custom_components/pogoda_by/manifest.json`.
+2. Restart Home Assistant.
+3. Follow the configuration steps below.
 
-## Настройка после установки
+## Configuration after installation
 
-[![Добавить интеграцию](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=pogoda_by)
+[![Add integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=pogoda_by)
 
-1. Откройте **Настройки → Устройства и службы → Добавить интеграцию → Pogoda.by**.
-2. Выберите страну из справочника, затем станцию из списка этой страны. В подписи станции указан её действительный ID, а не номер строки в JSON.
-3. Дождитесь первого успешного получения RSS. Если станция не публикует поддерживаемую погоду, форма сообщит об этом и позволит выбрать другую.
+1. Open **Settings → Devices & services → Add integration → Pogoda.by**.
+2. Select a country from the catalogue, then a station from that country's list. The label includes the actual station ID, rather than its position in the JSON data.
+3. Wait for the first successful RSS response. If the station does not publish supported weather data, the form will report this and let you choose another station.
 
-Для нескольких станций добавьте интеграцию несколько раз. Повторное добавление одной станции блокируется. Для смены станции добавьте новую запись и удалите старую, когда она больше не требуется.
+To use multiple stations, add the integration more than once. Adding the same station twice is blocked. To change stations, add a new entry and remove the old one when it is no longer needed.
 
-Это предварительная версия. Исходный код: https://github.com/Toropyga/pogoda_by. Для ручной установки скачайте репозиторий через **Code → Download ZIP** и распакуйте его. Не копируйте весь проект в `custom_components`: туда нужна только вложенная папка `pogoda_by`. Для установки через Marketplace / HACS отдельный GitHub Release не обязателен. Подготовка публикации описана в [HACS.md](HACS.md).
+This is a preliminary version. Source code: https://github.com/Toropyga/pogoda_by. For manual installation, download the repository using **Code → Download ZIP** and extract it. Only the nested `pogoda_by` folder belongs in `custom_components`. A separate GitHub Release is not required for Marketplace / HACS installation. Publication preparation is described in [HACS.md](HACS.md) (in Russian).
 
-## Языки интерфейса
+## Interface languages
 
-Поддерживаются **белорусский (`be`), польский (`pl`), русский (`ru`), английский (`en`) и немецкий (`de`)**. Переведены выбор страны и станции, сообщения об ошибках, настройки обновления и названия сенсоров.
+**Belarusian (`be`), Polish (`pl`), Russian (`ru`), English (`en`) and German (`de`)** are supported. Translations cover country and station selection, error messages, update settings and sensor names.
 
-Язык выбирается автоматически по языку интерфейса Home Assistant в профиле пользователя. Отдельный переключатель в интеграции не требуется. Пользовательские имена сущностей не перезаписываются.
+The language follows the Home Assistant interface language selected in the user's profile. No separate language selector is needed in the integration. User-defined entity names are not overwritten.
 
-Названия станций и текстовые значения, полученные от Pogoda.by, сохраняются в исходном виде. Например, описания погоды, тенденция давления и направление ветра из русскоязычного RSS не переводятся автоматически; числовые показания одинаковы для всех языков.
+Station names and text values received from Pogoda.by are preserved as provided. For example, weather descriptions, pressure trends and wind directions from the Russian-language RSS feed are not translated automatically; numeric readings are the same in every language.
 
-## Иконка интеграции
+## Integration icon
 
-В интеграцию включена иконка **Pogoda.by** с прозрачным фоном:
+The integration includes a **Pogoda.by** icon with a transparent background:
 
-- `custom_components/pogoda_by/brand/icon.png` — 256×256 пикселей;
-- `custom_components/pogoda_by/brand/icon@2x.png` — 512×512 пикселей.
+- `custom_components/pogoda_by/brand/icon.png` — 256×256 pixels;
+- `custom_components/pogoda_by/brand/icon@2x.png` — 512×512 pixels.
 
-Home Assistant **2026.3 и новее** автоматически использует изображения из папки `brand`. Дополнительные настройки в `manifest.json` не нужны. При обновлении установленной интеграции скопируйте папку `pogoda_by` целиком, перезапустите Home Assistant и обновите страницу браузера. В версиях Home Assistant до 2026.3 локальные изображения интеграций этим способом не поддерживаются.
+Home Assistant **2026.3 and later** automatically uses images from the `brand` folder. No additional `manifest.json` settings are needed. When updating an installed integration, copy the entire `pogoda_by` folder, restart Home Assistant and refresh your browser. Earlier Home Assistant versions do not support local integration images this way.
 
-Исходное изображение сохранено в `assets/pogoda-by-source.png`. Повторно подготовить размеры можно в Windows командой `./tools/build_brand.ps1` из папки проекта.
+The source image is saved as `assets/pogoda-by-source.png`. To regenerate the required sizes on Windows, run `./tools/build_brand.ps1` from the project directory.
 
-## Сенсоры
+## Sensors
 
-Сенсор создаётся, когда соответствующее поле впервые появится в RSS. Если поле появится позже, перезапуск не нужен. Если ранее доступное поле пропадёт, сенсор станет недоступен; нулевые значения не подставляются.
+A sensor is created when its field first appears in the RSS feed. If a field appears later, no restart is needed. If a previously available field disappears, the sensor becomes unavailable; missing readings are not replaced with zero.
 
-| Поле | Единица / тип | Дополнительные сведения |
+| Field | Unit / type | Additional information |
 | --- | --- | --- |
-| Температура | °C | Поддерживаются знак минус, точка и запятая |
-| Атмосферное давление | hPa | Атрибут `status`: тенденция из RSS |
-| Тенденция давления | Текст | Например, «падает» |
-| Скорость ветра | m/s | `direction` и `speed_kmh`; единицы можно менять в Home Assistant |
-| Направление ветра | Текст | Без подмены штиля северным направлением |
-| Погода | Текст | Полное описание и исходная строка в атрибутах |
-| Время наблюдения | Timestamp | Время `pubDate`, приведённое к UTC; интерфейс отображает местное время |
-| Метеостанция | Диагностический текст | ID, страна, имя, координаты, часовой пояс, ICAO, ссылка |
-| Влажность | % | Только если RSS явно содержит это поле |
-| Порывы ветра | m/s | Только если RSS явно содержит это поле |
-| Видимость | km | Только если RSS явно содержит это поле в километрах |
+| Temperature | °C | Supports negative values and decimal points or commas |
+| Atmospheric pressure | hPa | `status` attribute: trend from the RSS feed |
+| Pressure trend | Text | For example, “falling” |
+| Wind speed | m/s | `direction` and `speed_kmh`; units can be changed in Home Assistant |
+| Wind direction | Text | Calm conditions are not reported as a northerly wind |
+| Weather | Text | Full description and the original text in attributes |
+| Observation time | Timestamp | `pubDate` converted to UTC; the interface displays local time |
+| Weather station | Diagnostic text | ID, country, name, coordinates, time zone, ICAO and link |
+| Humidity | % | Only if the RSS feed explicitly contains this field |
+| Wind gust | m/s | Only if the RSS feed explicitly contains this field |
+| Visibility | km | Only if the RSS feed explicitly contains this field in kilometres |
 
-Влажность, порывы и видимость предусмотрены разборщиком как дополнительные поля, но их наличие в текущем сервисе не подтверждено. Интеграция не вычисляет их из других данных.
+The parser supports humidity, wind gusts and visibility as optional fields, but their availability in the current service has not been confirmed. The integration does not derive them from other readings.
 
-Каждая станция представлена отдельным устройством. У сущностей стабильные unique_id, основанные на стране, ID станции и типе показателя. Имена entity_id назначает Home Assistant.
+Each station is represented by a separate device. Entities have stable unique_id values based on the country, station ID and measurement type. Home Assistant assigns entity_id values.
 
-Интервал по умолчанию — **1 час (60 минут)**. Кнопка **Настроить** в записи интеграции позволяет выбрать от 5 до 180 минут. На один цикл приходится один RSS-запрос для всех сенсоров станции. Справочник загружается при настройке; информация о выбранной станции сохраняется в записи и не требует повторной загрузки при старте Home Assistant.
+The default update interval is **1 hour (60 minutes)**. Select **Configure** on the integration entry to choose an interval from 5 to 180 minutes. Each cycle uses one RSS request for all sensors at a station. The catalogue is loaded during configuration; the chosen station's metadata is stored in the entry and does not need to be downloaded again when Home Assistant starts.
 
-После обновления значение по умолчанию применяется к записям без явно сохранённого интервала. Если интервал уже сохранён через **Настроить**, он сохраняется; для часового обновления установите **60** вручную.
+After an update, the default applies to entries without an explicitly saved interval. If an interval was saved using **Configure**, it is retained; set it to **60** manually for hourly updates.
 
-При ошибке HTTP, тайм-ауте или некорректном RSS погодные сенсоры становятся недоступны. Home Assistant повторяет обновление автоматически. Диагностический сенсор станции хранит локально сохранённые метаданные и остаётся доступен. Успешный ответ с устаревшей датой не считается сетевой ошибкой: проверяйте время наблюдения. Интеграция не обещает, что сама станция публикует новые измерения каждый час.
+If an HTTP error, timeout or invalid RSS response occurs, weather sensors become unavailable. Home Assistant retries updates automatically. The diagnostic station sensor stores metadata locally and remains available. A successful response with an old observation date is not treated as a network error: check the observation time. The integration does not guarantee that the station itself publishes new measurements every hour.
 
-Сенсор `weather` с прогнозом не создаётся; для вывода используйте карточки сущностей, плитки и графики сенсоров. Числовые показатели имеют device_class, state_class и стандартные единицы Home Assistant.
+No forecast `weather` entity is created; use entity cards, tiles and sensor graphs for display. Numeric readings have device_class, state_class and standard Home Assistant units.
 
-## Проверка
+## Validation
 
-Автономные тесты разбора JSON/RSS используют стандартную библиотеку Python:
+Offline JSON/RSS parsing tests use the Python standard library:
 
 ```powershell
 python -m unittest discover -s tests -v
 ```
 
-Проверка текущих ответов сайта без установки Home Assistant:
+Check live responses from the website without installing Home Assistant:
 
 ```powershell
 python tools/check_live.py --country BY --station 26851
 python tools/check_live.py --country PL --station 12372
 ```
 
-Скрипт только читает открытые данные. Он не меняет конфигурацию Home Assistant. Для диагностики сообщений интеграции можно временно включить:
+The script only reads public data. It does not modify the Home Assistant configuration. To diagnose integration messages, you can temporarily enable:
 
 ```yaml
 logger:
@@ -134,19 +135,19 @@ logger:
     custom_components.pogoda_by: debug
 ```
 
-## Статус проверки этой сборки
+## Validation status of this build
 
-Проверка синтаксиса, согласованности переводов и автономные тесты выполняются локально; итог записан в `VALIDATION.md`. Установленного тестового Home Assistant в среде разработки нет. Прямой доступ к API/RSS в этой среде не работает, поэтому фактические ответы сайта и полный процесс установки в работающий Home Assistant требуют проверки. Справочник поддерживает структуры «страна → массив станций» и «страна → объект станций». Неизвестные изменения схемы API приводят к сообщению об ошибке, а не к созданию фиктивных данных.
+Syntax checks, translation consistency checks and offline tests are performed locally; the results are recorded in `VALIDATION.md` (in Russian). No test Home Assistant instance is installed in the development environment. Direct access to the API/RSS is unavailable there, so actual provider responses and the complete installation process in a running Home Assistant instance still need verification. The catalogue parser supports “country → station array” and “country → station object” structures. Unsupported API schema changes produce an error rather than fabricated data.
 
-Используются стандартные API ConfigFlow, OptionsFlow, DataUpdateCoordinator и SensorEntity. Целевая минимальная версия: Home Assistant 2025.1; фактическая совместимость ещё не подтверждена запуском внутри Home Assistant.
+The integration uses the standard ConfigFlow, OptionsFlow, DataUpdateCoordinator and SensorEntity APIs. The target minimum version is Home Assistant 2025.1; actual compatibility has not yet been confirmed by running it inside Home Assistant.
 
-## Источники
+## Sources
 
 - Marketplace: https://www.home-assistant.io/integrations/marketplace/
-- Переход с HACS: https://contributors.home-assistant.io/marketplace/how-it-works/
-- Справочник: https://pogoda.by/api/v2/weather-fact/all-cities
+- Moving from HACS: https://contributors.home-assistant.io/marketplace/how-it-works/
+- Catalogue: https://pogoda.by/api/v2/weather-fact/all-cities
 - RSS: https://pogoda.by/rss/weather?station=26851
-- Документация Home Assistant: https://contributors.home-assistant.io/core/integrations/config-entries/
-- Получение данных: https://contributors.home-assistant.io/core/integrations/fetching-data/
+- Home Assistant documentation: https://contributors.home-assistant.io/core/integrations/config-entries/
+- Data fetching: https://contributors.home-assistant.io/core/integrations/fetching-data/
 
-Данные предоставлены Белгидрометом. Проект не является официальной интеграцией Белгидромета.
+Data is provided by Belhydromet. This project is not an official Belhydromet integration.
