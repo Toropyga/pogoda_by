@@ -1,14 +1,17 @@
-# Pogoda.by dla Home Assistant — 0.1.3
+# Pogoda.by dla Home Assistant — 0.1.4
 
-[Русский](README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md)
+[Русский](../README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md) | [Deutsch](README.de.md)
 
 Niestandardowa integracja Home Assistant. Pobiera aktualne obserwacje pogodowe z serwisu Belhydromet przez RSS, a listę krajów i stacji — przez API w formacie JSON. Klucz API nie jest wymagany. Integracja nie udostępnia prognozy pogody.
+
+![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-v0.1.4-blue.svg)
 
 > ⚠️ **Ważna uwaga:** Integracja udostępnia pełne informacje dla stacji meteorologicznych **na Białorusi**. Dla stacji w innych krajach informacje są często **niedostępne lub niekompletne**, ponieważ usługa Pogoda.by jest zorientowana przede wszystkim na dane Belhydrometu (Białoruś). Jeśli wybrałeś stację z innego kraju i czujniki wykazują błąd lub stają się niedostępne, jest to spowodowane brakiem dostępu do danych z usługi Pogoda.by.
 
 ## Instalacja przez Marketplace / HACS
 
-Wersja **0.1.3** obsługuje instalację przez Marketplace / HACS z repozytorium `Toropyga/pogoda_by`.
+Integracja obsługuje instalację przez Marketplace / HACS z repozytorium `Toropyga/pogoda_by`.
 
 [![Zainstaluj przez HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
 
@@ -57,11 +60,11 @@ Jeśli integracja została zainstalowana ręcznie, dodaj to samo repozytorium do
 
 Aby korzystać z kilku stacji, dodaj integrację kilka razy. Ponowne dodanie tej samej stacji jest blokowane. Aby zmienić stację, dodaj nowy wpis i usuń poprzedni, gdy nie będzie już potrzebny.
 
-Jest to wersja wstępna. Kod źródłowy: https://github.com/Toropyga/pogoda_by. W przypadku instalacji ręcznej pobierz repozytorium przez **Code → Download ZIP** i rozpakuj je. W katalogu `custom_components` umieść tylko zagnieżdżony katalog `pogoda_by`. Osobne wydanie GitHub Release nie jest wymagane do instalacji przez Marketplace / HACS. Przygotowanie publikacji opisano w pliku [HACS.md](HACS.md) w języku rosyjskim.
+Jest to wersja wstępna. Kod źródłowy: https://github.com/Toropyga/pogoda_by. W przypadku instalacji ręcznej pobierz repozytorium przez **Code → Download ZIP** i rozpakuj je. W katalogu `custom_components` umieść tylko zagnieżdżony katalog `pogoda_by`. Osobne wydanie GitHub Release nie jest wymagane do instalacji przez Marketplace / HACS. Przygotowanie publikacji opisano w pliku [HACS.md](../HACS.md) w języku rosyjskim.
 
 ## Języki interfejsu
 
-Obsługiwane są języki **białoruski (`be`), polski (`pl`), rosyjski (`ru`) i angielski (`en`)**. Przetłumaczono wybór kraju i stacji, komunikaty o błędach, ustawienia aktualizacji oraz nazwy sensorów.
+Obsługiwane są języki **białoruski (`be`), polski (`pl`), rosyjski (`ru`), angielski (`en`) i niemiecki (`de`)**. Przetłumaczono wybór kraju i stacji, komunikaty o błędach, ustawienia aktualizacji oraz nazwy sensorów.
 
 Język jest wybierany automatycznie na podstawie języka interfejsu Home Assistant w profilu użytkownika. Osobny przełącznik języka w integracji nie jest potrzebny. Nazwy encji nadane przez użytkownika nie są nadpisywane.
 

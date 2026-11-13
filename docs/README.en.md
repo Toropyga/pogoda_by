@@ -1,14 +1,17 @@
-# Pogoda.by for Home Assistant — 0.1.3
+# Pogoda.by for Home Assistant — 0.1.4
 
-[Русский](README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md)
+[Русский](../README.md) | [English](README.en.md) | [Polski](README.pl.md) | [Беларуская](README.be.md) | [Deutsch](README.de.md)
 
 A custom integration for Home Assistant. Retrieves observed weather from Belhydromet via RSS and the list of countries and stations via a JSON API. No API key is required. Weather forecasts are not provided.
+
+![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-v0.1.4-blue.svg)
 
 > ⚠️ **Important note:** The integration provides complete information for weather stations **in Belarus**. For stations in other countries, the information is often **unavailable or incomplete**, as the Pogoda.by service is primarily focused on Belhydromet data (Belarus). If you have selected a station from another country and the sensors show an error or become unavailable, this is due to data unavailability from the Pogoda.by service.
 
 ## Installation with Marketplace / HACS
 
-Version **0.1.3** supports installation through Marketplace / HACS from the `Toropyga/pogoda_by` repository.
+The integration supports installation through Marketplace / HACS from the `Toropyga/pogoda_by` repository.
 
 [![Install via HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Toropyga&repository=pogoda_by&category=Integration)
 
@@ -57,11 +60,11 @@ If the integration was installed manually, add the same repository to Marketplac
 
 To use multiple stations, add the integration more than once. Adding the same station twice is blocked. To change stations, add a new entry and remove the old one when it is no longer needed.
 
-This is a preliminary version. Source code: https://github.com/Toropyga/pogoda_by. For manual installation, download the repository using **Code → Download ZIP** and extract it. Only the nested `pogoda_by` folder belongs in `custom_components`. A separate GitHub Release is not required for Marketplace / HACS installation. Publication preparation is described in [HACS.md](HACS.md) (in Russian).
+This is a preliminary version. Source code: https://github.com/Toropyga/pogoda_by. For manual installation, download the repository using **Code → Download ZIP** and extract it. Only the nested `pogoda_by` folder belongs in `custom_components`. A separate GitHub Release is not required for Marketplace / HACS installation. Publication preparation is described in [HACS.md](../HACS.md) (in Russian).
 
 ## Interface languages
 
-**Belarusian (`be`), Polish (`pl`), Russian (`ru`) and English (`en`)** are supported. Translations cover country and station selection, error messages, update settings and sensor names.
+**Belarusian (`be`), Polish (`pl`), Russian (`ru`), English (`en`) and German (`de`)** are supported. Translations cover country and station selection, error messages, update settings and sensor names.
 
 The language follows the Home Assistant interface language selected in the user's profile. No separate language selector is needed in the integration. User-defined entity names are not overwritten.
 

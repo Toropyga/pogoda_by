@@ -15,6 +15,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.4] — 2026-11-13
+
+### Added
+- **German interface translation** — Added `de.json` translation covering country and station selection, error messages, update settings and sensor names
+- **German README** — Added `docs/README.de.md`; all README files now link to the German version
+- **Translated READMEs moved** — `README.en.md`, `README.pl.md`, `README.be.md` and `README.de.md` moved into the `docs/` folder; `README.md` (Russian) stays in the repository root
+
+### Fixed
+- **Spelling and grammar in translated READMEs** — Corrected a gender-agreement error and a Russian-calque word in the Belarusian README, a comma splice in the German README, and a missing article plus an omitted German mention in the English README
+
+### Technical Details
+- **Tests**: All 36 unit tests pass; the translation-key consistency check now covers five languages (`en`, `ru`, `be`, `pl`, `de`) instead of four
+
+---
+
 ## [0.1.3] — 2026-11-12
 
 ### Fixed
@@ -64,9 +79,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Brand icon** вЂ” Official Pogoda.by icon with transparent background (256Г—256 and 512Г—512 pixels)
 - **README files in multiple languages** вЂ” Complete setup and troubleshooting guides:
   - Russian: [README.md](README.md)
-  - English: [README.en.md](README.en.md)
-  - Polish: [README.pl.md](README.pl.md)
-  - Belarusian: [README.be.md](README.be.md)
+  - English: [README.en.md](docs/README.en.md)
+  - Polish: [README.pl.md](docs/README.pl.md)
+  - Belarusian: [README.be.md](docs/README.be.md)
 - **HACS configuration** вЂ” Ready for Marketplace/HACS installation with `hacs.json`
 - **License** вЂ” MIT license for open-source distribution
 - **GitHub Actions workflow** вЂ” Automated testing and syntax checking on every commit
@@ -113,11 +128,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Versions
 
 ### Semver Compatibility
-- **Current version**: 0.1.1 (alpha/preview)
+- **Current version**: 0.1.4 (alpha/preview)
 - **Target minimum**: Home Assistant 2025.1.0
 - **Minimum Python**: 3.11 (as per Home Assistant requirements)
 
 ### Release Timeline
+- **0.1.4** (2026-11-13) — German translation and README, translated READMEs moved into `docs/`
 - **0.1.1** (2026-11-12) вЂ” Initial preview release with full Marketplace/HACS support
 
 ---
@@ -172,6 +188,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
-**Last updated**: 2026-11-12  
+**Last updated**: 2026-11-13  
 **Maintained by**: [@Toropyga](https://github.com/Toropyga)
 

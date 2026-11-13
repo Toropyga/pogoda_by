@@ -1,0 +1,79 @@
+{
+  "title": "Pogoda.by",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Land auswählen",
+        "description": "Wählen Sie ein Land aus dem aktuellen Pogoda.by-Katalog. Wenn das Laden fehlschlägt, senden Sie das Formular erneut ab, um es noch einmal zu versuchen.",
+        "data": {
+          "country": "Land"
+        }
+      },
+      "station": {
+        "title": "Wetterstation auswählen",
+        "description": "Wählen Sie eine Station in {country}. Die Zahl in Klammern ist die Stations-ID.",
+        "data": {
+          "station_id": "Wetterstation"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zu Pogoda.by nicht möglich. Bitte versuchen Sie es erneut.",
+      "invalid_data": "Der Stationskatalog hat ein nicht unterstütztes Format oder ist leer.",
+      "no_weather": "Für diese Station sind derzeit keine unterstützten Wetterdaten verfügbar. Versuchen Sie es erneut oder wählen Sie eine andere Station.",
+      "invalid_country": "Wählen Sie ein Land aus der Liste.",
+      "invalid_station": "Wählen Sie eine Station aus der Liste."
+    },
+    "abort": {
+      "already_configured": "Diese Station wurde bereits hinzugefügt."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Abrufeinstellungen",
+        "description": "Ruft in diesem Intervall eine RSS-Antwort pro Station ab. Der Anbieter aktualisiert die Beobachtungen möglicherweise seltener.",
+        "data": {
+          "update_interval": "Aktualisierungsintervall (Minuten)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "pressure": {
+        "name": "Luftdruck"
+      },
+      "pressure_trend": {
+        "name": "Drucktendenz"
+      },
+      "wind_speed": {
+        "name": "Windgeschwindigkeit"
+      },
+      "wind_direction": {
+        "name": "Windrichtung"
+      },
+      "condition": {
+        "name": "Wetter"
+      },
+      "observation_time": {
+        "name": "Beobachtungszeit"
+      },
+      "station": {
+        "name": "Station"
+      },
+      "humidity": {
+        "name": "Luftfeuchtigkeit"
+      },
+      "wind_gust": {
+        "name": "Windböen"
+      },
+      "visibility": {
+        "name": "Sichtweite"
+      }
+    }
+  }
+}
