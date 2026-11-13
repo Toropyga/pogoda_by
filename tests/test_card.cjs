@@ -137,3 +137,74 @@ test('visual editor emits changes and retains standard Lovelace settings',async(
 test('bad ranges, booleans and entity mappings are rejected',()=>{
   const e=environment();for(const config of [{hours_to_show:0},{hours_to_show:1.5},{stale_after:0},{show_graph:'false'},{language:'invalid'},{entities:{temperature:'light.demo'}},{station:'<script>'}])assert.throws(()=>e.make(config));
 });
+
+test('full view remains the default with optional readings and history',async()=>{
+  const e=environment();e.hass.states['sensor.humidity']={state:'81',attributes:{unit_of_measurement:'%'}};
+  const card=e.make({entities:{humidity:'sensor.humidity'}});await flush();
+  assert.equal(card._config.compact,false);assert.match(summary(card),/class="hero"/);
+  assert.match(summary(card),/Влажность/);assert.ok(card._graph);
+  assert.equal(card.getGridOptions().columns,12);assert.equal(card.getCardSize(),11);
+});
+test('compact view has its own layout and no history or optional readings',async()=>{
+  const e=environment();e.hass.states['sensor.humidity']={state:'81',attributes:{unit_of_measurement:'%'}};
+  const card=e.make({compact:true,show_graph:true,entities:{humidity:'sensor.humidity'}});await flush();
+  const html=summary(card);assert.match(html,/class="compact-layout"/);
+  assert.match(html,/Минск/);assert.match(html,/Переменная облачность/);assert.match(html,/>7,4</);
+  assert.match(html,/data-entity="sensor.custom_temperature"/);assert.match(html,/data-entity="sensor.custom_wind_speed"/);
+  assert.match(html,/data-entity="sensor.custom_pressure"/);assert.match(html,/<time /);
+  assert.doesNotMatch(html,/class="hero"|Влажность|sensor.humidity/);
+  assert.equal(card._graph,undefined);assert.equal(card.shadowRoot.querySelector('.history').children.length,0);
+  assert.equal(card.getGridOptions().columns,6);assert.equal(card.getCardSize(),3);
+});
+test('switching views restores graph settings and uses current readings',async()=>{
+  const e=environment(),card=e.make({hours_to_show:48});await flush();
+  card.setConfig({station:'BY_26850',hours_to_show:48,compact:true});await flush();
+  assert.equal(card._graph,undefined);
+  e.hass.states['sensor.custom_temperature'].state='0';card.hass={...e.hass};
+  assert.match(summary(card),/class="value">0</);
+  card.setConfig({station:'BY_26850',hours_to_show:48,compact:false});await flush();
+  assert.match(summary(card),/class="hero"/);assert.match(summary(card),/class="value">0</);
+  assert.equal(card._graph.config.hours_to_show,48);
+});
+test('compact view respects hidden measurements and observation time',async()=>{
+  const e=environment(),card=e.make({compact:true,show_details:false,show_observation:false});await flush();
+  assert.doesNotMatch(summary(card),/class="compact-metrics"|class="compact-observed"|<time /);
+  assert.match(summary(card),/Свежие данные/);assert.match(summary(card),/Pogoda.by ↗/);
+});
+test('compact view keeps stale, unknown and unavailable states explicit',async()=>{
+  const e=environment(),card=e.make({compact:true});await flush();
+  e.hass.states['sensor.custom_observation_time'].state=new Date(Date.now()-4*3600000).toISOString();card.hass={...e.hass};
+  assert.match(summary(card),/Устаревшие данные/);
+  e.hass.states['sensor.custom_observation_time'].state='unknown';card.hass={...e.hass};
+  assert.match(summary(card),/Время наблюдения неизвестно/);assert.doesNotMatch(summary(card),/<time /);
+  for(const field of ['temperature','condition','wind_speed','pressure'])e.hass.states['sensor.custom_'+field].state='unavailable';
+  card.hass={...e.hass};assert.match(summary(card),/status off/);assert.match(summary(card),/class="value">—</);
+  assert.doesNotMatch(summary(card),/Свежие данные/);
+});
+test('switching to compact cancels pending history creation',async()=>{
+  let release;const e=environment({helper:()=>new Promise(r=>{release=r})}),card=e.make();await flush();
+  card.setConfig({station:'BY_26850',compact:true});
+  release({createCardElement(){throw new Error('Must not run in compact view')}});await flush();
+  assert.equal(card._graph,undefined);assert.equal(card.shadowRoot.querySelector('.history').children.length,0);
+  assert.match(summary(card),/compact-layout/);
+});
+test('view selector emits booleans and preserves full-view settings',async()=>{
+  const e=environment(),Editor=e.definitions.get('pogoda-by-card-editor'),editor=new Editor();
+  editor.setConfig({station:'BY_26850',show_graph:true,hours_to_show:48,grid_options:{columns:12}});editor.hass=e.hass;await flush();
+  assert.match(editor.shadowRoot.innerHTML,/<select data-key="compact">/);assert.match(editor.shadowRoot.innerHTML,/Полный вид/);
+  editor.shadowRoot.querySelector('.form').listeners.change({target:{dataset:{key:'compact'},type:'select-one',value:'true',reportValidity:()=>true}});
+  let config=editor.lastEvent.detail.config;assert.equal(config.compact,true);assert.equal(config.show_graph,true);
+  assert.equal(config.hours_to_show,48);assert.equal(config.grid_options.columns,12);
+  assert.match(editor.shadowRoot.innerHTML,/data-key="show_graph"[^>]*disabled/);
+  assert.match(editor.shadowRoot.innerHTML,/data-key="hours_to_show"[^>]*disabled/);
+  editor.shadowRoot.querySelector('.form').listeners.change({target:{dataset:{key:'compact'},type:'select-one',value:'false',reportValidity:()=>true}});
+  config=editor.lastEvent.detail.config;assert.equal(config.compact,false);assert.equal(config.show_graph,true);assert.equal(config.hours_to_show,48);
+  assert.doesNotMatch(editor.shadowRoot.innerHTML,/data-key="show_graph"[^>]*disabled/);
+});
+test('compact view escapes titles, descriptions and metric tooltips',async()=>{
+  const e=environment();e.hass.states['sensor.custom_condition'].state='" onmouseover="alert(1)<img>';
+  e.hass.states['sensor.custom_wind_direction'].state='<script>alert(1)</script>';
+  const card=e.make({compact:true,name:'<b>Title</b>'});await flush();
+  const html=summary(card);assert.match(html,/&lt;b&gt;Title&lt;\/b&gt;/);assert.match(html,/&quot; onmouseover=&quot;/);
+  assert.doesNotMatch(html,/<img|<script|<h2[^>]*><b>/);
+});

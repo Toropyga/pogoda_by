@@ -2,7 +2,7 @@
 
 DOMAIN = "pogoda_by"
 NAME = "Pogoda.by"
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 CATALOG_URL = "https://pogoda.by/api/v2/weather-fact/all-cities"
 RSS_URL = "https://pogoda.by/rss/weather"
 CONF_COUNTRY = "country"

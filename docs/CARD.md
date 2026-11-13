@@ -1,4 +1,4 @@
-# Pogoda.by Card — 0.2.0
+# Pogoda.by Card — 0.2.1
 
 [Полная инструкция на русском](CARD.ru.md)
 
@@ -12,7 +12,7 @@ Starting with **integration version 0.2.0**, the card is bundled in `custom_comp
 2. Add a station if this is your first installation. Existing station entries are retained on updates.
 3. Refresh your browser; add **Pogoda.by Card** from the dashboard card picker and select your station.
 
-The integration automatically serves and registers `/pogoda_by/pogoda-by-card.js?v=0.2.0` as a module when resources are managed in storage (the normal UI mode). No separate copy to `www` or second HACS repository is needed. Registration runs once for the whole integration, before station data is fetched. Updates change the resource URL's version without creating duplicates. Adding the card to a dashboard is still a user action.
+The integration automatically serves and registers `/pogoda_by/pogoda-by-card.js?v=0.2.1` as a module when resources are managed in storage (the normal UI mode). No separate copy to `www` or second HACS repository is needed. Registration runs once for the whole integration, before station data is fetched. Updates change the resource URL's version without creating duplicates. Adding the card to a dashboard is still a user action.
 
 Existing manual resource records at `/local/pogoda-by-card.js` (including query strings) are migrated to the bundled URL. Duplicate records at these two known local paths are consolidated; unrelated resources and the old file on disk are retained.
 
@@ -24,7 +24,7 @@ For `lovelace.resource_mode: yaml`, add the following to your existing configura
 lovelace:
   resource_mode: yaml
   resources:
-    - url: /pogoda_by/pogoda-by-card.js?v=0.2.0
+    - url: /pogoda_by/pogoda-by-card.js?v=0.2.1
       type: module
 ```
 
@@ -47,6 +47,27 @@ language: auto
 `station` uses `COUNTRY_STATION_ID`. Sensor discovery uses the entity registry's stable unique IDs, so renamed entity IDs are supported. `name` overrides the title. `hours_to_show` accepts 1–168; `stale_after` accepts 5–10080 minutes. `language`: `auto`, `en`, `ru`, `be`, `pl`, `de`. Existing Lovelace visibility/grid options are retained by the editor. Provider descriptions are not translated.
 
 If registry access is unavailable, an optional `entities` mapping can explicitly set any of `temperature`, `pressure`, `pressure_trend`, `wind_speed`, `wind_direction`, `condition`, `observation_time`, `station`, `humidity`, `wind_gust`, `visibility` to real sensor entity IDs. With explicit mappings, `station` is optional.
+
+## Full and compact views
+
+In the visual editor, select **Card view → Full view / Compact view**. The existing boolean YAML option is retained: `compact: false` selects the default full view; `compact: true` selects a separate compact layout.
+
+| Content | Full view | Compact view |
+| --- | --- | --- |
+| Station, icon, temperature, conditions | Large weather block | Horizontal header; long text is truncated with a tooltip |
+| Wind and pressure | Detailed blocks | Short row with direction/trend also available in tooltips |
+| Humidity, gusts, visibility | When available | Hidden |
+| Freshness and observation time | Status and footer | Status and a short time row |
+| Temperature history | If `show_graph: true` | Hidden |
+| Default Sections width | 12 columns | 6 columns |
+
+```yaml
+type: custom:pogoda-by-card
+station: BY_26850
+compact: true
+```
+
+`show_graph` and `hours_to_show` are ignored in compact view, but their values are retained for returning to full view. History controls are disabled in the compact editor. `show_details: false` hides the wind/pressure row; `show_observation: false` hides the observation time. The freshness indicator stays visible.
 
 Freshness uses the actual observation timestamp. Missing or invalid timestamps are never marked fresh. Units come directly from Home Assistant sensors. No forecast or missing measurements are synthesized. The history graph uses the built-in `history-graph` through `loadCardHelpers` and requires Recorder/History with recorded temperature data. The card does not poll the weather service.
 

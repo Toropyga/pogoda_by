@@ -8,7 +8,8 @@
   *{box-sizing:border-box}body{margin:0;padding:44px 24px}main{max-width:460px;margin:auto}.eyebrow{font-size:11px;letter-spacing:.14em;color:#728495;margin:0 0 10px}h1{font-size:24px;font-weight:600;margin:0 0 8px}.intro{font-size:13px;line-height:1.6;color:var(--secondary-text-color);margin:0 0 22px}.controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}button{font:inherit;font-size:12px;border:1px solid var(--divider-color);border-radius:9px;padding:8px 10px;color:inherit;background:var(--card-background-color);cursor:pointer}ha-card{display:block;border:1px solid var(--divider-color);background:var(--ha-card-background);border-radius:var(--ha-card-border-radius)}.caption{text-align:center;font-size:11px;color:var(--secondary-text-color);margin:16px 0}#editor{margin-top:22px}#test-result{white-space:pre-wrap;font-size:12px}body.dark{--primary-color:#75b9e4;--primary-text-color:#e4edf4;--secondary-text-color:#94a8b9;--divider-color:#334452;--ha-card-background:#1b2b38;--card-background-color:#1b2b38;--secondary-background-color:#263b4a;--pby-cloud:#9eb9cf;--pby-cloud-line:#b0c9dd;color:#e4edf4;background:#101e29}
   @media(max-width:400px){body{padding:24px 14px}h1{font-size:21px}}
 </style>
-<main><p class="eyebrow">HOME ASSISTANT · CUSTOM CARD</p><h1>Pogoda.by Card</h1><p class="intro">Предпросмотр карточки. Все показания на этой странице — демонстрационные.</p><div class="controls"><button id="theme">Светлая / тёмная</button><button id="graph">График</button><button id="old">Устаревшие данные</button><button id="edit">Настройки</button></div><div id="mount"></div><p class="caption">Фактическая погода · История наблюдений</p><div id="editor" hidden></div><pre id="test-result" hidden></pre></main>
+<style>main{max-width:960px}.previews{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}.preview-label{font-size:13px;font-weight:600;color:var(--secondary-text-color);margin:0 0 12px}#editor{max-width:460px}@media(max-width:720px){.previews{grid-template-columns:minmax(0,1fr)}}</style>
+<main><p class="eyebrow">HOME ASSISTANT · CUSTOM CARD</p><h1>Pogoda.by Card</h1><p class="intro">Полный и компактный виды одной карточки. Все показания на этой странице — демонстрационные.</p><div class="controls"><button id="theme">Светлая / тёмная</button><button id="graph">График</button><button id="old">Устаревшие данные</button><button id="edit">Настройки</button></div><div class="previews"><section><h2 class="preview-label" id="main-view-label">Полный вид</h2><div id="mount"></div></section><section><h2 class="preview-label">Компактный вид</h2><div id="compact-mount"></div></section></div><p class="caption">Фактическая погода · История наблюдений</p><div id="editor" hidden></div><pre id="test-result" hidden></pre></main>
 <script src="../custom_components/pogoda_by/frontend/pogoda-by-card.js"></script>
 <script>
   // A minimal host for visual and interaction tests; this is NOT Home Assistant.
@@ -45,13 +46,15 @@
   window.demoConfig = {type:'custom:pogoda-by-card',station:'BY_26850'};
   window.card=document.createElement('pogoda-by-card');
   card.setConfig(demoConfig); card.hass=demoHass; document.getElementById('mount').append(card);
+  window.compactCard=document.createElement('pogoda-by-card');
+  compactCard.setConfig({...demoConfig,compact:true});compactCard.hass=demoHass;document.getElementById('compact-mount').append(compactCard);
   document.getElementById('theme').onclick=()=>document.body.classList.toggle('dark');
   document.getElementById('graph').onclick=()=>{demoConfig.show_graph=demoConfig.show_graph===false;card.setConfig(demoConfig)};
   let oldObservation=false;
-  document.getElementById('old').onclick=()=>{oldObservation=!oldObservation;demoHass.states['sensor.renamed_observation_time'].state=new Date(Date.now()-(oldObservation?300:35)*60000).toISOString();card.hass={...demoHass}};
+  document.getElementById('old').onclick=()=>{oldObservation=!oldObservation;demoHass.states['sensor.renamed_observation_time'].state=new Date(Date.now()-(oldObservation?300:35)*60000).toISOString();card.hass={...demoHass};compactCard.hass={...demoHass}};
   document.getElementById('edit').onclick=()=>{
     const mount=document.getElementById('editor');mount.hidden=!mount.hidden;
-    if(!mount.firstElementChild){const editor=card.constructor.getConfigElement();editor.setConfig(demoConfig);editor.hass=demoHass;editor.addEventListener('config-changed',event=>{demoConfig=event.detail.config;card.setConfig(demoConfig)});mount.append(editor)}
+    if(!mount.firstElementChild){const editor=card.constructor.getConfigElement();editor.setConfig(demoConfig);editor.hass=demoHass;editor.addEventListener('config-changed',event=>{demoConfig=event.detail.config;card.setConfig(demoConfig);compactCard.setConfig({...demoConfig,compact:true});document.getElementById('main-view-label').textContent=demoConfig.compact?'Компактный вид':'Полный вид'});mount.append(editor)}
   };
 </script>
 </html>

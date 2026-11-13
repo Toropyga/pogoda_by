@@ -44,6 +44,7 @@ async function main() {
     await check('No synthetic optional readings',"card.shadowRoot.querySelectorAll('.metric').length===2");
     await check('History helper receives renamed temperature and 24 hours',"helperCalls[0].entities[0].entity==='sensor.renamed_temperature' && helperCalls[0].hours_to_show===24");
     await check('Recent observation status',"card.shadowRoot.querySelector('.status').textContent==='Свежие данные'");
+    await check('Compact view is shorter and does not load a graph',"compactCard.getBoundingClientRect().height<card.getBoundingClientRect().height && !!compactCard.shadowRoot.querySelector('.compact-layout') && !compactCard._graph && !compactCard.shadowRoot.querySelector('.history').children.length");
     await check('Click opens correct entity',"(()=>{let found;card.addEventListener('hass-more-info',e=>found=e.detail.entityId,{once:true});card.shadowRoot.querySelector('.temp').click();return found==='sensor.renamed_temperature'})()");
     await check('Unrelated hass updates preserve history instance',"(()=>{const graph=card._graph;card.hass={...demoHass,states:{...demoHass.states,'light.demo':{state:'on',attributes:{}}}};return card._graph===graph})()");
     await cdp('Page.captureScreenshot',{format:'png'}).then(r=>fs.writeFile(path.join(output,'pogoda-card-light.png'),Buffer.from(r.data,'base64')));
@@ -51,6 +52,7 @@ async function main() {
     await cdp('Page.captureScreenshot',{format:'png'}).then(r=>fs.writeFile(path.join(output,'pogoda-card-dark.png'),Buffer.from(r.data,'base64')));
     await cdp('Emulation.setDeviceMetricsOverride',{width:360,height:1000,deviceScaleFactor:1,mobile:false});
     await check('Mobile layout has no horizontal overflow',"document.documentElement.scrollWidth===360 && card.shadowRoot.querySelector('ha-card').scrollWidth<=card.clientWidth");
+    await check('Compact view fits a narrow section',"(()=>{compactCard.style.width='180px';const fits=compactCard.shadowRoot.querySelector('ha-card').scrollWidth<=compactCard.clientWidth;compactCard.style.width='';return fits})()");
     await cdp('Page.captureScreenshot',{format:'png'}).then(r=>fs.writeFile(path.join(output,'pogoda-card-mobile.png'),Buffer.from(r.data,'base64')));
     await check('Old observations detected',"(()=>{demoHass.states['sensor.renamed_observation_time'].state=new Date(Date.now()-4*3600000).toISOString();card.hass={...demoHass};return card.shadowRoot.querySelector('.status').textContent==='Устаревшие данные'})()");
     await check('Missing observation never shown as fresh',"(()=>{demoHass.states['sensor.renamed_observation_time'].state='unknown';card.hass={...demoHass};return card.shadowRoot.querySelector('.status').textContent==='Время наблюдения неизвестно'&&!card.shadowRoot.querySelector('time')})()");

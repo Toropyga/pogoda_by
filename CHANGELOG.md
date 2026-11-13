@@ -13,6 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.1] - 2026-11-13
+
+### Changed
+- `compact: true` now renders a separate compact layout: station, conditions and temperature in a horizontal header, short wind/pressure readings, freshness and observation time. The full view remains the default.
+- The visual editor now provides Full / Compact view selection in all five languages. History controls are disabled in compact view while preserving their values for a switch back to full view.
+- Compact cards use six columns by default in Sections and adapt to narrow containers. Optional humidity/gust/visibility readings and history are shown only in full view.
+- The demonstration page now compares full and compact cards. Added mode-switching, history cancellation and compact rendering checks.
+- The integration and card version are 0.2.1; versioned resource URLs request the updated JavaScript. All README translations include full YAML resource registration and view examples.
+
+### Validation
+- 50 Python tests and 26 card logic tests pass locally. Actual Home Assistant rendering, mobile layout and Recorder history still need verification.
+
+---
+
 ## [0.2.0] - 2026-11-13
 
 ### Added

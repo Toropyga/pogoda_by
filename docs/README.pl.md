@@ -1,11 +1,11 @@
-# Pogoda.by dla Home Assistant — 0.2.0
+# Pogoda.by dla Home Assistant — 0.2.1
 
 [Русский](README.ru.md) | [English](../README.md) | [Polski](README.pl.md) | [Беларуская](README.be.md) | [Deutsch](README.de.md)
 
 Niestandardowa integracja Home Assistant. Pobiera aktualne obserwacje pogodowe z serwisu Belhydromet przez RSS, a listę krajów i stacji — przez API w formacie JSON. Klucz API nie jest wymagany. Integracja nie udostępnia prognozy pogody.
 
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
-![Version](https://img.shields.io/badge/version-v0.2.0-blue.svg)
+![Version](https://img.shields.io/badge/version-v0.2.1-blue.svg)
 
 > ⚠️ **Ważna uwaga:** Integracja udostępnia pełne informacje dla stacji meteorologicznych **na Białorusi**. Dla stacji w innych krajach informacje są często **niedostępne lub niekompletne**, ponieważ usługa Pogoda.by jest zorientowana przede wszystkim na dane Belhydrometu (Białoruś). Jeśli wybrałeś stację z innego kraju i czujniki wykazują błąd lub stają się niedostępne, jest to spowodowane brakiem dostępu do danych z usługi Pogoda.by.
 
@@ -83,7 +83,7 @@ Obraz źródłowy zapisano jako `assets/pogoda-by-source.png`. Aby ponownie przy
 
 ## Karta na pulpicie
 
-**Pogoda.by Card 0.2.0** jest instalowana i aktualizowana razem z integracją. Podczas instalacji ręcznej skopiuj cały katalog `custom_components/pogoda_by`, łącznie z `frontend`, `brand` i `translations`. Nie jest potrzebne drugie repozytorium karty ani osobne kopiowanie JavaScript do `/config/www`.
+**Pogoda.by Card 0.2.1** jest instalowana i aktualizowana razem z integracją. Podczas instalacji ręcznej skopiuj cały katalog `custom_components/pogoda_by`, łącznie z `frontend`, `brand` i `translations`. Nie jest potrzebne drugie repozytorium karty ani osobne kopiowanie JavaScript do `/config/www`.
 
 Po instalacji lub aktualizacji uruchom ponownie Home Assistant i odśwież przeglądarkę. W edytorze pulpitu wybierz **Dodaj kartę → Pogoda.by Card**, a następnie skonfigurowaną stację. Użytkownik sam umieszcza kartę na wybranym pulpicie; zasób JavaScript jest rejestrowany automatycznie przy standardowym zarządzaniu zasobami w interfejsie.
 
@@ -102,7 +102,35 @@ compact: false
 language: auto
 ```
 
-Przy **zasobach zarządzanych w YAML** (`lovelace.resource_mode: yaml`) dodaj `/pogoda_by/pogoda-by-card.js?v=0.2.0` z `type: module` do istniejącej listy zasobów, przeładuj zasoby i odśwież przeglądarkę. Pulpit YAML może korzystać z zasobów zarządzanych w interfejsie; o automatycznej rejestracji decyduje tryb zarządzania zasobami.
+### Pełny i kompaktowy widok
+
+W edytorze wizualnym wybierz **Widok karty → Pełny widok / Widok kompaktowy**. W YAML służy do tego dotychczasowy parametr logiczny `compact`: `false` oznacza domyślny pełny widok, `true` — widok kompaktowy.
+
+Pełny widok zawiera szczegółowe pomiary i opcjonalny wykres temperatury. Widok kompaktowy ma osobny poziomy nagłówek ze stacją, pogodą i temperaturą, krótki wiersz wiatru i ciśnienia oraz status aktualności i czas obserwacji. Wykres, wilgotność, porywy i widoczność są w nim ukryte, również przy `show_graph: true`; ustawienia wykresu są zachowywane po powrocie do pełnego widoku.
+
+```yaml
+type: custom:pogoda-by-card
+station: BY_26850
+compact: true
+```
+
+### Zasoby YAML
+
+Przy **zasobach zarządzanych w YAML** (`lovelace.resource_mode: yaml`) dodaj `/pogoda_by/pogoda-by-card.js?v=0.2.1` z `type: module` do istniejącej listy zasobów, przeładuj zasoby i odśwież przeglądarkę. Pulpit YAML może korzystać z zasobów zarządzanych w interfejsie; o automatycznej rejestracji decyduje tryb zarządzania zasobami.
+
+Dodaj poniższy wpis do `configuration.yaml`, łącząc go z istniejącymi sekcjami `lovelace` i `resources` oraz zachowując pozostałe zasoby:
+
+```yaml
+lovelace:
+  resource_mode: yaml
+  resources:
+    - url: /pogoda_by/pogoda-by-card.js?v=0.2.1
+      type: module
+```
+
+Po aktualizacji integracji uruchom ponownie Home Assistant. Po zmianie zasobów YAML wykonaj akcję `lovelace.reload_resources` lub uruchom ponownie Home Assistant. Odśwież przeglądarkę przez **Ctrl+F5** i ponownie otwórz **Dodaj kartę**.
+
+Aby sprawdzić zasób, otwórz `/pogoda_by/pogoda-by-card.js?v=0.2.1` pod adresem swojego Home Assistant. Powinien zostać wyświetlony JavaScript. Przy błędzie **404** sprawdź obecność `/config/custom_components/pogoda_by/frontend/pogoda-by-card.js` oraz poprawne uruchomienie integracji.
 
 Aktualizacja zachowuje skonfigurowane stacje i zmienia URL zasobu karty. W trybie storage poprzedni ręczny wpis `/local/pogoda-by-card.js` jest przenoszony automatycznie, a duplikaty znanych lokalnych adresów karty są scalane. Zmienione identyfikatory entity_id sensorów są obsługiwane.
 
@@ -165,7 +193,7 @@ logger:
 
 ## Stan weryfikacji tej wersji
 
-Dla wersji 0.2.0 lokalnie przeszło **50 testów Pythona i 18 testów logiki karty**, a także kontrole składni, spójności kluczy tłumaczeń i białych znaków. Testy karty używają minimalnego modelu DOM, a testy rejestracji — atrap API Home Assistant; nie potwierdzają działania w rzeczywistym interfejsie Home Assistant.
+Dla wersji 0.2.1 lokalnie przeszło **50 testów Pythona i 26 testów logiki karty**, a także kontrole składni, spójności kluczy tłumaczeń i białych znaków. Testy karty używają minimalnego modelu DOM, a testy rejestracji — atrap API Home Assistant; nie potwierdzają działania w rzeczywistym interfejsie Home Assistant.
 
 Rzeczywiste odpowiedzi API/RSS, rejestracja zasobu, wykres danych Recorder i wygląd na komputerze oraz telefonie wymagają jeszcze sprawdzenia. Szczegóły po rosyjsku: [stan weryfikacji](../VALIDATION.md). Docelowa minimalna wersja to Home Assistant 2025.1; zgodność podczas rzeczywistego uruchomienia nie została jeszcze potwierdzona.
 

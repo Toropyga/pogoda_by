@@ -1,11 +1,11 @@
-# Pogoda.by for Home Assistant — 0.2.0
+# Pogoda.by for Home Assistant — 0.2.1
 
 [Русский](docs/README.ru.md) | [English](README.md) | [Polski](docs/README.pl.md) | [Беларуская](docs/README.be.md) | [Deutsch](docs/README.de.md)
 
 A custom integration for Home Assistant. Retrieves observed weather from Belhydromet via RSS and the list of countries and stations via a JSON API. No API key is required. Weather forecasts are not provided.
 
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
-![Version](https://img.shields.io/badge/version-v0.2.0-blue.svg)
+![Version](https://img.shields.io/badge/version-v0.2.1-blue.svg)
 
 > ⚠️ **Important note:** The integration provides complete information for weather stations **in Belarus**. For stations in other countries, the information is often **unavailable or incomplete**, as the Pogoda.by service is primarily focused on Belhydromet data (Belarus). If you have selected a station from another country and the sensors show an error or become unavailable, this is due to data unavailability from the Pogoda.by service.
 
@@ -83,7 +83,7 @@ The source image is saved as `assets/pogoda-by-source.png`. To regenerate the re
 
 ## Dashboard card
 
-**Pogoda.by Card 0.2.0** is installed and updated together with the integration. Copy the entire `custom_components/pogoda_by` directory when installing manually, including `frontend`, `brand` and `translations`. A second dashboard repository or a separate copy to `/config/www` is not needed.
+**Pogoda.by Card 0.2.1** is installed and updated together with the integration. Copy the entire `custom_components/pogoda_by` directory when installing manually, including `frontend`, `brand` and `translations`. A second dashboard repository or a separate copy to `/config/www` is not needed.
 
 After installing or updating, restart Home Assistant and refresh the browser. In the dashboard editor, select **Add card → Pogoda.by Card**, then choose a configured station. Adding the card to a particular dashboard remains a user action; registering its JavaScript resource is automatic in the normal UI-managed resource mode.
 
@@ -102,7 +102,35 @@ compact: false
 language: auto
 ```
 
-With **YAML-managed resources** (`lovelace.resource_mode: yaml`), add `/pogoda_by/pogoda-by-card.js?v=0.2.0` with `type: module` to the existing resource list, then reload resources and refresh the browser. A YAML dashboard can still use UI-managed resources; it is the resource mode that determines whether registration is automatic.
+### Full and compact views
+
+In the visual editor, use **Card view → Full view / Compact view**. YAML uses the existing boolean `compact`: `false` selects the full view (default), `true` selects the compact view.
+
+Full view includes detailed readings and an optional temperature graph. Compact view uses a separate horizontal header with the station, conditions and temperature, plus a short wind/pressure row, freshness status and observation time. The graph and optional humidity/gust/visibility readings are hidden in compact view, even if `show_graph: true`; graph settings are retained when returning to full view.
+
+```yaml
+type: custom:pogoda-by-card
+station: BY_26850
+compact: true
+```
+
+### YAML-managed resources
+
+With **YAML-managed resources** (`lovelace.resource_mode: yaml`), add `/pogoda_by/pogoda-by-card.js?v=0.2.1` with `type: module` to the existing resource list, then reload resources and refresh the browser. A YAML dashboard can still use UI-managed resources; it is the resource mode that determines whether registration is automatic.
+
+Add this to `configuration.yaml`, merging it into the existing `lovelace` and `resources` sections and keeping your other resources:
+
+```yaml
+lovelace:
+  resource_mode: yaml
+  resources:
+    - url: /pogoda_by/pogoda-by-card.js?v=0.2.1
+      type: module
+```
+
+Restart Home Assistant after upgrading the integration. After changing YAML resources, run `lovelace.reload_resources` or restart Home Assistant. Refresh the browser with **Ctrl+F5** and reopen **Add card**.
+
+To check the resource, open `/pogoda_by/pogoda-by-card.js?v=0.2.1` under your Home Assistant address. It should return JavaScript. If it returns **404**, check that `/config/custom_components/pogoda_by/frontend/pogoda-by-card.js` exists and that the integration has started.
 
 Updates preserve configured stations and update the card resource URL. An existing manual `/local/pogoda-by-card.js` resource is migrated automatically in storage mode; duplicate entries at the known local card paths are consolidated. Renamed sensor entity IDs are supported.
 
@@ -165,7 +193,7 @@ logger:
 
 ## Validation status of this build
 
-Release 0.2.0 passes **50 Python tests and 18 card logic tests** locally, plus syntax, translation-key consistency and whitespace checks. The card tests use a minimal DOM host and the registration tests use Home Assistant API doubles; they do not prove compatibility with a running Home Assistant frontend.
+Version 0.2.1 passes **50 Python tests and 26 card logic tests** locally, plus syntax, translation-key consistency and whitespace checks. The card tests use a minimal DOM host and the registration tests use Home Assistant API doubles; they do not prove compatibility with a running Home Assistant frontend.
 
 Live API/RSS responses, actual resource registration, the real Recorder graph and visual rendering on desktop/mobile still need verification. Details: [validation](VALIDATION.md) (in Russian). The target minimum remains Home Assistant 2025.1; runtime compatibility has not yet been confirmed.
 
