@@ -1,11 +1,11 @@
-# Pogoda.by dla Home Assistant — 0.1.4
+# Pogoda.by dla Home Assistant — 0.2.0
 
 [Русский](README.ru.md) | [English](../README.md) | [Polski](README.pl.md) | [Беларуская](README.be.md) | [Deutsch](README.de.md)
 
 Niestandardowa integracja Home Assistant. Pobiera aktualne obserwacje pogodowe z serwisu Belhydromet przez RSS, a listę krajów i stacji — przez API w formacie JSON. Klucz API nie jest wymagany. Integracja nie udostępnia prognozy pogody.
 
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
-![Version](https://img.shields.io/badge/version-v0.1.4-blue.svg)
+![Version](https://img.shields.io/badge/version-v0.2.0-blue.svg)
 
 > ⚠️ **Ważna uwaga:** Integracja udostępnia pełne informacje dla stacji meteorologicznych **na Białorusi**. Dla stacji w innych krajach informacje są często **niedostępne lub niekompletne**, ponieważ usługa Pogoda.by jest zorientowana przede wszystkim na dane Belhydrometu (Białoruś). Jeśli wybrałeś stację z innego kraju i czujniki wykazują błąd lub stają się niedostępne, jest to spowodowane brakiem dostępu do danych z usługi Pogoda.by.
 
@@ -40,7 +40,7 @@ W starszych wersjach [HACS](https://www.hacs.xyz/) musi być wcześniej zainstal
 6. Potwierdź pobranie proponowanej wersji. Jeśli nie opublikowano jeszcze wydań, HACS korzysta z domyślnej gałęzi repozytorium.
 7. Uruchom ponownie Home Assistant i wykonaj konfigurację opisaną poniżej.
 
-Marketplace i HACS umieszczają pliki w `/config/custom_components/pogoda_by/`, razem z tłumaczeniami i katalogiem `brand`. Kolejne opublikowane wersje można pobierać przez odpowiedni interfejs.
+Marketplace i HACS umieszczają pliki w `/config/custom_components/pogoda_by/`, razem z katalogami `frontend`, `brand` i `translations`. Kolejne opublikowane wersje można pobierać przez odpowiedni interfejs.
 
 Jeśli integracja została zainstalowana ręcznie, dodaj to samo repozytorium do Marketplace lub HACS i zainstaluj ją, zastępując istniejące pliki. Zmiana sposobu instalacji nie wymaga usuwania wpisu Pogoda.by w sekcji „Urządzenia oraz usługi”.
 
@@ -60,7 +60,7 @@ Jeśli integracja została zainstalowana ręcznie, dodaj to samo repozytorium do
 
 Aby korzystać z kilku stacji, dodaj integrację kilka razy. Ponowne dodanie tej samej stacji jest blokowane. Aby zmienić stację, dodaj nowy wpis i usuń poprzedni, gdy nie będzie już potrzebny.
 
-Jest to wersja wstępna. Kod źródłowy: https://github.com/Toropyga/pogoda_by. W przypadku instalacji ręcznej pobierz repozytorium przez **Code → Download ZIP** i rozpakuj je. W katalogu `custom_components` umieść tylko zagnieżdżony katalog `pogoda_by`. Osobne wydanie GitHub Release nie jest wymagane do instalacji przez Marketplace / HACS. Przygotowanie publikacji opisano w pliku [HACS.md](../HACS.md) w języku rosyjskim.
+Jest to wersja wstępna. Kod źródłowy: https://github.com/Toropyga/pogoda_by. W przypadku instalacji ręcznej pobierz repozytorium przez **Code → Download ZIP** i rozpakuj je. W katalogu `custom_components` umieść tylko zagnieżdżony katalog `pogoda_by`. Osobne wydanie GitHub Release nie jest wymagane do instalacji przez Marketplace / HACS. Przygotowanie publikacji opisano w pliku [HACS.md](HACS.md) w języku rosyjskim.
 
 ## Języki interfejsu
 
@@ -80,6 +80,33 @@ Integracja zawiera ikonę **Pogoda.by** z przezroczystym tłem:
 Home Assistant **2026.3 i nowszy** automatycznie korzysta z obrazów w katalogu `brand`. Dodatkowe ustawienia w `manifest.json` nie są potrzebne. Podczas aktualizacji zainstalowanej integracji skopiuj cały katalog `pogoda_by`, uruchom ponownie Home Assistant i odśwież stronę w przeglądarce. Starsze wersje Home Assistant nie obsługują w ten sposób lokalnych obrazów integracji.
 
 Obraz źródłowy zapisano jako `assets/pogoda-by-source.png`. Aby ponownie przygotować wymagane rozmiary w systemie Windows, uruchom `./tools/build_brand.ps1` z katalogu projektu.
+
+## Karta na pulpicie
+
+**Pogoda.by Card 0.2.0** jest instalowana i aktualizowana razem z integracją. Podczas instalacji ręcznej skopiuj cały katalog `custom_components/pogoda_by`, łącznie z `frontend`, `brand` i `translations`. Nie jest potrzebne drugie repozytorium karty ani osobne kopiowanie JavaScript do `/config/www`.
+
+Po instalacji lub aktualizacji uruchom ponownie Home Assistant i odśwież przeglądarkę. W edytorze pulpitu wybierz **Dodaj kartę → Pogoda.by Card**, a następnie skonfigurowaną stację. Użytkownik sam umieszcza kartę na wybranym pulpicie; zasób JavaScript jest rejestrowany automatycznie przy standardowym zarządzaniu zasobami w interfejsie.
+
+Karta wyświetla temperaturę, opis pogody, wiatr, ciśnienie i czas obserwacji. Oznacza nieaktualne dane, obsługuje widok kompaktowy, jasny i ciemny motyw oraz pięć języków. Wilgotność, porywy i widoczność pojawiają się tylko wtedy, gdy dane są dostępne. Kliknięcie odczytu otwiera szczegóły encji. Opcjonalny wykres temperatury korzysta z Recorder/History Home Assistant; karta nie tworzy prognozy.
+
+Przykład konfiguracji — zastąp `BY_26850` własną stacją lub wybierz ją w edytorze wizualnym:
+
+```yaml
+type: custom:pogoda-by-card
+station: BY_26850
+show_details: true
+show_graph: true
+hours_to_show: 24
+stale_after: 180
+compact: false
+language: auto
+```
+
+Przy **zasobach zarządzanych w YAML** (`lovelace.resource_mode: yaml`) dodaj `/pogoda_by/pogoda-by-card.js?v=0.2.0` z `type: module` do istniejącej listy zasobów, przeładuj zasoby i odśwież przeglądarkę. Pulpit YAML może korzystać z zasobów zarządzanych w interfejsie; o automatycznej rejestracji decyduje tryb zarządzania zasobami.
+
+Aktualizacja zachowuje skonfigurowane stacje i zmienia URL zasobu karty. W trybie storage poprzedni ręczny wpis `/local/pogoda-by-card.js` jest przenoszony automatycznie, a duplikaty znanych lokalnych adresów karty są scalane. Zmienione identyfikatory entity_id sensorów są obsługiwane.
+
+[Instrukcja karty po angielsku](CARD.md), [instrukcja po rosyjsku](CARD.ru.md), [historia zmian](../CHANGELOG.md).
 
 ## Sensory
 
@@ -109,7 +136,7 @@ Po aktualizacji wartość domyślna jest stosowana do wpisów bez zapisanego int
 
 W przypadku błędu HTTP, przekroczenia limitu czasu lub nieprawidłowej odpowiedzi RSS sensory pogodowe stają się niedostępne. Home Assistant automatycznie ponawia aktualizację. Diagnostyczny sensor stacji przechowuje metadane lokalnie i pozostaje dostępny. Poprawna odpowiedź ze starą datą obserwacji nie jest traktowana jako błąd sieciowy: sprawdzaj czas obserwacji. Integracja nie gwarantuje, że sama stacja publikuje nowe pomiary co godzinę.
 
-Encja `weather` z prognozą nie jest tworzona; do wyświetlania danych używaj kart encji, kafelków i wykresów sensorów. Odczyty liczbowe mają device_class, state_class i standardowe jednostki Home Assistant.
+Encja `weather` z prognozą nie jest tworzona. Obserwacje można wyświetlać w Pogoda.by Card lub standardowych kartach encji, kafelkach i wykresach sensorów. Odczyty liczbowe mają device_class, state_class i standardowe jednostki Home Assistant.
 
 ## Weryfikacja
 
@@ -117,6 +144,8 @@ Testy parsowania JSON/RSS działające bez dostępu do sieci korzystają ze stan
 
 ```powershell
 python -m unittest discover -s tests -v
+node --check custom_components/pogoda_by/frontend/pogoda-by-card.js
+node --test tests/test_card.cjs
 ```
 
 Sprawdzenie bieżących odpowiedzi serwisu bez instalowania Home Assistant:
@@ -136,9 +165,9 @@ logger:
 
 ## Stan weryfikacji tej wersji
 
-Kontrola składni, spójności tłumaczeń i testy bez dostępu do sieci są wykonywane lokalnie; wyniki zapisano w `VALIDATION.md` w języku rosyjskim. W środowisku programistycznym nie ma testowej instalacji Home Assistant. Bezpośredni dostęp do API/RSS w tym środowisku nie działa, dlatego rzeczywiste odpowiedzi serwisu i pełna instalacja w działającym Home Assistant wymagają jeszcze sprawdzenia. Parser katalogu obsługuje struktury „kraj → tablica stacji” i „kraj → obiekt stacji”. Nieobsługiwane zmiany schematu API powodują zgłoszenie błędu zamiast tworzenia fikcyjnych danych.
+Dla wersji 0.2.0 lokalnie przeszło **50 testów Pythona i 18 testów logiki karty**, a także kontrole składni, spójności kluczy tłumaczeń i białych znaków. Testy karty używają minimalnego modelu DOM, a testy rejestracji — atrap API Home Assistant; nie potwierdzają działania w rzeczywistym interfejsie Home Assistant.
 
-Integracja korzysta ze standardowych API ConfigFlow, OptionsFlow, DataUpdateCoordinator i SensorEntity. Docelowa minimalna wersja to Home Assistant 2025.1; faktyczna zgodność nie została jeszcze potwierdzona uruchomieniem w Home Assistant.
+Rzeczywiste odpowiedzi API/RSS, rejestracja zasobu, wykres danych Recorder i wygląd na komputerze oraz telefonie wymagają jeszcze sprawdzenia. Szczegóły po rosyjsku: [stan weryfikacji](../VALIDATION.md). Docelowa minimalna wersja to Home Assistant 2025.1; zgodność podczas rzeczywistego uruchomienia nie została jeszcze potwierdzona.
 
 ## Źródła
 

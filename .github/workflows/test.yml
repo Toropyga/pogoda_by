@@ -24,6 +24,16 @@ jobs:
     - name: Run unit tests
       run: |
         python -m unittest discover -s tests -v
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    - name: Check dashboard card
+      run: |
+        node --check custom_components/pogoda_by/frontend/pogoda-by-card.js
+        node --test tests/test_card.cjs
     
     - name: Check Python syntax
       run: |

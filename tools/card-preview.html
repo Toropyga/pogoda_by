@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pogoda.by Card — demonstration</title>
+<style>
+  :root{font-family:Segoe UI,Arial,sans-serif;color:#26384a;background:#edf2f6;--primary-color:#3583b8;--primary-text-color:#26384a;--secondary-text-color:#728495;--divider-color:#e6edf2;--ha-card-border-radius:20px;--ha-card-background:#fff;--card-background-color:#fff;--secondary-background-color:#f2f6f9}
+  *{box-sizing:border-box}body{margin:0;padding:44px 24px}main{max-width:460px;margin:auto}.eyebrow{font-size:11px;letter-spacing:.14em;color:#728495;margin:0 0 10px}h1{font-size:24px;font-weight:600;margin:0 0 8px}.intro{font-size:13px;line-height:1.6;color:var(--secondary-text-color);margin:0 0 22px}.controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}button{font:inherit;font-size:12px;border:1px solid var(--divider-color);border-radius:9px;padding:8px 10px;color:inherit;background:var(--card-background-color);cursor:pointer}ha-card{display:block;border:1px solid var(--divider-color);background:var(--ha-card-background);border-radius:var(--ha-card-border-radius)}.caption{text-align:center;font-size:11px;color:var(--secondary-text-color);margin:16px 0}#editor{margin-top:22px}#test-result{white-space:pre-wrap;font-size:12px}body.dark{--primary-color:#75b9e4;--primary-text-color:#e4edf4;--secondary-text-color:#94a8b9;--divider-color:#334452;--ha-card-background:#1b2b38;--card-background-color:#1b2b38;--secondary-background-color:#263b4a;--pby-cloud:#9eb9cf;--pby-cloud-line:#b0c9dd;color:#e4edf4;background:#101e29}
+  @media(max-width:400px){body{padding:24px 14px}h1{font-size:21px}}
+</style>
+<main><p class="eyebrow">HOME ASSISTANT · CUSTOM CARD</p><h1>Pogoda.by Card</h1><p class="intro">Предпросмотр карточки. Все показания на этой странице — демонстрационные.</p><div class="controls"><button id="theme">Светлая / тёмная</button><button id="graph">График</button><button id="old">Устаревшие данные</button><button id="edit">Настройки</button></div><div id="mount"></div><p class="caption">Фактическая погода · История наблюдений</p><div id="editor" hidden></div><pre id="test-result" hidden></pre></main>
+<script src="../custom_components/pogoda_by/frontend/pogoda-by-card.js"></script>
+<script>
+  // A minimal host for visual and interaction tests; this is NOT Home Assistant.
+  class DemoIcon extends HTMLElement {
+    connectedCallback() {
+      const name = this.getAttribute('icon') || '';
+      this.style.cssText = 'display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center';
+      this.innerHTML = name.includes('gauge') ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19a10 10 0 1 1 16 0M12 3v3M5 7l2 2m12-2-2 2M3 14h3m12 0h3m-9 0 4-5"/><circle cx="12" cy="14" r="2"/></svg>' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 8h13a3 3 0 1 0-3-3M2 12h17a3 3 0 1 1-3 3M2 17h7a2 2 0 1 1-2 2"/></svg>';
+    }
+  }
+  customElements.define('ha-icon', DemoIcon);
+  class DemoHistory extends HTMLElement {
+    set hass(value) {
+      this._hass = value;
+      this.innerHTML = '<div style="padding:14px 16px 10px"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--secondary-text-color)"><span>'+this.config.title+'</span><span>24 ч · °C</span></div><svg viewBox="0 0 380 115" style="display:block;width:100%;margin-top:14px" role="img" aria-label="Демонстрационный график температуры"><defs><linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#65abd6" stop-opacity=".22"/><stop offset="1" stop-color="#65abd6" stop-opacity="0"/></linearGradient></defs><path d="M0 25H380M0 65H380M0 105H380" stroke="var(--divider-color)"/><path d="M0 74 18 76 36 81 54 83 72 85 90 82 108 79 126 69 144 60 162 49 180 41 198 32 216 29 234 34 252 39 270 43 288 44 306 50 324 58 342 62 360 67 380 70V108H0Z" fill="url(#fill)"/><path d="M0 74 18 76 36 81 54 83 72 85 90 82 108 79 126 69 144 60 162 49 180 41 198 32 216 29 234 34 252 39 270 43 288 44 306 50 324 58 342 62 360 67 380 70" fill="none" stroke="#5aa5d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--secondary-text-color)"><span>09:00</span><span>15:00</span><span>21:00</span><span>03:00</span><span>09:00</span></div></div>';
+    }
+  }
+  customElements.define('demo-history', DemoHistory);
+  window.helperCalls = [];
+  window.loadCardHelpers = async () => ({ createCardElement(config) { helperCalls.push(config); const el = document.createElement('demo-history'); el.config = config; return el; } });
+  const fieldValues = {temperature:'7.4',pressure:'1018',pressure_trend:'слабо растёт',wind_speed:'3',wind_direction:'северо-западный',condition:'Переменная облачность',observation_time:new Date(Date.now()-35*60000).toISOString(),station:'Минск'};
+  const units = {temperature:'°C',pressure:'hPa',wind_speed:'m/s'};
+  window.registryEntries = [];
+  window.demoHass = { states:{}, locale:{language:'ru'}, language:'ru', config:{time_zone:'Europe/Minsk'}, connection:{},
+    callWS: async () => registryEntries,
+    formatEntityState(state) { const n=Number(state.state); const value=state.state!=='' && Number.isFinite(n) ? new Intl.NumberFormat('ru').format(n) : state.state; return value+(state.attributes.unit_of_measurement?' '+state.attributes.unit_of_measurement:''); }
+  };
+  for (const [field, value] of Object.entries(fieldValues)) {
+    // Arbitrary entity IDs deliberately test renamed entities.
+    const entity_id='sensor.renamed_'+field;
+    registryEntries.push({entity_id,platform:'pogoda_by',unique_id:'BY_26850_'+field,device_id:'minsk',disabled_by:null});
+    demoHass.states[entity_id]={entity_id,state:value,attributes:{friendly_name:'Pogoda.by '+field,unit_of_measurement:units[field],...(field==='station'?{country:'BY',station_id:'26850',name:'Минск',observation_url:'https://pogoda.by/observation/meteo-observation/26850'}:{station_id:'26850'})}};
+  }
+  window.demoConfig = {type:'custom:pogoda-by-card',station:'BY_26850'};
+  window.card=document.createElement('pogoda-by-card');
+  card.setConfig(demoConfig); card.hass=demoHass; document.getElementById('mount').append(card);
+  document.getElementById('theme').onclick=()=>document.body.classList.toggle('dark');
+  document.getElementById('graph').onclick=()=>{demoConfig.show_graph=demoConfig.show_graph===false;card.setConfig(demoConfig)};
+  let oldObservation=false;
+  document.getElementById('old').onclick=()=>{oldObservation=!oldObservation;demoHass.states['sensor.renamed_observation_time'].state=new Date(Date.now()-(oldObservation?300:35)*60000).toISOString();card.hass={...demoHass}};
+  document.getElementById('edit').onclick=()=>{
+    const mount=document.getElementById('editor');mount.hidden=!mount.hidden;
+    if(!mount.firstElementChild){const editor=card.constructor.getConfigElement();editor.setConfig(demoConfig);editor.hass=demoHass;editor.addEventListener('config-changed',event=>{demoConfig=event.detail.config;card.setConfig(demoConfig)});mount.append(editor)}
+  };
+</script>
+</html>

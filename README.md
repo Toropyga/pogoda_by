@@ -1,11 +1,11 @@
-﻿# Pogoda.by for Home Assistant — 0.1.4
+# Pogoda.by for Home Assistant — 0.2.0
 
 [Русский](docs/README.ru.md) | [English](README.md) | [Polski](docs/README.pl.md) | [Беларуская](docs/README.be.md) | [Deutsch](docs/README.de.md)
 
 A custom integration for Home Assistant. Retrieves observed weather from Belhydromet via RSS and the list of countries and stations via a JSON API. No API key is required. Weather forecasts are not provided.
 
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
-![Version](https://img.shields.io/badge/version-v0.1.4-blue.svg)
+![Version](https://img.shields.io/badge/version-v0.2.0-blue.svg)
 
 > ⚠️ **Important note:** The integration provides complete information for weather stations **in Belarus**. For stations in other countries, the information is often **unavailable or incomplete**, as the Pogoda.by service is primarily focused on Belhydromet data (Belarus). If you have selected a station from another country and the sensors show an error or become unavailable, this is due to data unavailability from the Pogoda.by service.
 
@@ -40,7 +40,7 @@ On earlier versions, [HACS](https://www.hacs.xyz/) must already be installed and
 6. Confirm the suggested version. If no releases have been published, HACS uses the repository's default branch.
 7. Restart Home Assistant and follow the configuration steps below.
 
-Marketplace and HACS place the files in `/config/custom_components/pogoda_by/`, including translations and the `brand` folder. Future published versions can be downloaded through the corresponding interface.
+Marketplace and HACS place the files in `/config/custom_components/pogoda_by/`, including `frontend`, `brand` and `translations`. Future published versions can be downloaded through the corresponding interface.
 
 If the integration was installed manually, add the same repository to Marketplace or HACS and install it over the existing files. There is no need to delete the Pogoda.by entry from Devices & services when changing the installation method.
 
@@ -60,7 +60,7 @@ If the integration was installed manually, add the same repository to Marketplac
 
 To use multiple stations, add the integration more than once. Adding the same station twice is blocked. To change stations, add a new entry and remove the old one when it is no longer needed.
 
-This is a preliminary version. Source code: https://github.com/Toropyga/pogoda_by. For manual installation, download the repository using **Code → Download ZIP** and extract it. Only the nested `pogoda_by` folder belongs in `custom_components`. A separate GitHub Release is not required for Marketplace / HACS installation. Publication preparation is described in [HACS.md](HACS.md) (in Russian).
+This is a preliminary version. Source code: https://github.com/Toropyga/pogoda_by. For manual installation, download the repository using **Code → Download ZIP** and extract it. Only the nested `pogoda_by` folder belongs in `custom_components`. A separate GitHub Release is not required for Marketplace / HACS installation. Publication preparation is described in [HACS.md](docs/HACS.md) (in Russian).
 
 ## Interface languages
 
@@ -80,6 +80,33 @@ The integration includes a **Pogoda.by** icon with a transparent background:
 Home Assistant **2026.3 and later** automatically uses images from the `brand` folder. No additional `manifest.json` settings are needed. When updating an installed integration, copy the entire `pogoda_by` folder, restart Home Assistant and refresh your browser. Earlier Home Assistant versions do not support local integration images this way.
 
 The source image is saved as `assets/pogoda-by-source.png`. To regenerate the required sizes on Windows, run `./tools/build_brand.ps1` from the project directory.
+
+## Dashboard card
+
+**Pogoda.by Card 0.2.0** is installed and updated together with the integration. Copy the entire `custom_components/pogoda_by` directory when installing manually, including `frontend`, `brand` and `translations`. A second dashboard repository or a separate copy to `/config/www` is not needed.
+
+After installing or updating, restart Home Assistant and refresh the browser. In the dashboard editor, select **Add card → Pogoda.by Card**, then choose a configured station. Adding the card to a particular dashboard remains a user action; registering its JavaScript resource is automatic in the normal UI-managed resource mode.
+
+The card displays temperature, current conditions, wind, pressure and the observation timestamp. It marks old observations, supports compact mode, light/dark themes and five interface languages. Humidity, gusts and visibility appear only when available. Clicking a reading opens the entity details. The optional temperature graph uses Home Assistant Recorder/History; no forecast is generated.
+
+Example configuration — replace `BY_26850` with your station, or select it in the visual editor:
+
+```yaml
+type: custom:pogoda-by-card
+station: BY_26850
+show_details: true
+show_graph: true
+hours_to_show: 24
+stale_after: 180
+compact: false
+language: auto
+```
+
+With **YAML-managed resources** (`lovelace.resource_mode: yaml`), add `/pogoda_by/pogoda-by-card.js?v=0.2.0` with `type: module` to the existing resource list, then reload resources and refresh the browser. A YAML dashboard can still use UI-managed resources; it is the resource mode that determines whether registration is automatic.
+
+Updates preserve configured stations and update the card resource URL. An existing manual `/local/pogoda-by-card.js` resource is migrated automatically in storage mode; duplicate entries at the known local card paths are consolidated. Renamed sensor entity IDs are supported.
+
+See the [card guide](docs/CARD.md), [Russian guide](docs/CARD.ru.md) and [changelog](CHANGELOG.md).
 
 ## Sensors
 
@@ -109,7 +136,7 @@ After an update, the default applies to entries without an explicitly saved inte
 
 If an HTTP error, timeout or invalid RSS response occurs, weather sensors become unavailable. Home Assistant retries updates automatically. The diagnostic station sensor stores metadata locally and remains available. A successful response with an old observation date is not treated as a network error: check the observation time. The integration does not guarantee that the station itself publishes new measurements every hour.
 
-No forecast `weather` entity is created; use entity cards, tiles and sensor graphs for display. Numeric readings have device_class, state_class and standard Home Assistant units.
+No forecast `weather` entity is created. Display observations with Pogoda.by Card or standard entity cards, tiles and sensor graphs. Numeric readings have device_class, state_class and standard Home Assistant units.
 
 ## Validation
 
@@ -117,6 +144,8 @@ Offline JSON/RSS parsing tests use the Python standard library:
 
 ```powershell
 python -m unittest discover -s tests -v
+node --check custom_components/pogoda_by/frontend/pogoda-by-card.js
+node --test tests/test_card.cjs
 ```
 
 Check live responses from the website without installing Home Assistant:
@@ -136,9 +165,9 @@ logger:
 
 ## Validation status of this build
 
-Syntax checks, translation consistency checks and offline tests are performed locally; the results are recorded in `VALIDATION.md` (in Russian). No test Home Assistant instance is installed in the development environment. Direct access to the API/RSS is unavailable there, so actual provider responses and the complete installation process in a running Home Assistant instance still need verification. The catalogue parser supports “country → station array” and “country → station object” structures. Unsupported API schema changes produce an error rather than fabricated data.
+Release 0.2.0 passes **50 Python tests and 18 card logic tests** locally, plus syntax, translation-key consistency and whitespace checks. The card tests use a minimal DOM host and the registration tests use Home Assistant API doubles; they do not prove compatibility with a running Home Assistant frontend.
 
-The integration uses the standard ConfigFlow, OptionsFlow, DataUpdateCoordinator and SensorEntity APIs. The target minimum version is Home Assistant 2025.1; actual compatibility has not yet been confirmed by running it inside Home Assistant.
+Live API/RSS responses, actual resource registration, the real Recorder graph and visual rendering on desktop/mobile still need verification. Details: [validation](VALIDATION.md) (in Russian). The target minimum remains Home Assistant 2025.1; runtime compatibility has not yet been confirmed.
 
 ## Sources
 

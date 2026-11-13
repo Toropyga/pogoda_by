@@ -1,4 +1,4 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -8,19 +8,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Integration into the main Home Assistant catalogue (requires HACS approval)
+- Inclusion in the community Marketplace / HACS catalogue (separate from Home Assistant Core)
 - Enhanced debugging logging for troubleshooting
-- Improved user interface for update interval selection
-- Support for custom station metadata caching
 
 ---
 
-## [0.1.4] — 2026-11-13
+## [0.2.0] - 2026-11-13
+
+### Added
+- Bundled Pogoda.by Card 0.2.0: visual station selection, renamed-entity discovery, current observations, optional temperature history, freshness indicators, theme support, compact layout and five interface languages.
+- Automatic static-file and Lovelace resource registration during component setup; the card installs and updates with the integration.
+- Migration from the previous `/local/pogoda-by-card.js` resource, versioned URLs and consolidation of known duplicate local card resources. Unrelated resources are preserved, including when the collection has not been loaded yet.
+- YAML resource instructions, a demonstration host, frontend registration tests and card logic checks in CI. Registration failures are logged without failing weather sensor setup.
+
+### Changed
+- The card source now lives in `custom_components/pogoda_by/frontend/`, so integration installation includes it.
+- All five READMEs document the combined installation, card configuration, YAML resource mode, upgrades and current validation status.
+- Integration metadata, frontend version and resource URL examples are aligned at 0.2.0.
+
+### Fixed
+- Removed an incorrect HACS Default badge from the Belarusian README; the project is installed as a custom repository.
+- Repaired broken README links, a duplicate release heading and corrupted punctuation in this changelog.
+
+### Validation
+- 50 Python tests and 18 card logic tests pass locally; syntax and whitespace checks pass.
+- A running Home Assistant instance, the real Recorder history graph and visual rendering still require verification.
+
+---
+
+## [0.1.4] - 2026-11-13
 
 ### Added
 - **German interface translation** — Added `de.json` translation covering country and station selection, error messages, update settings and sensor names
 - **German README** — Added `docs/README.de.md`; all README files now link to the German version
-- **Translated READMEs moved** — `README.en.md`, `README.pl.md`, `README.be.md` and `README.de.md` moved into the `docs/` folder; `README.md` (Russian) stays in the repository root
+- **README organization** — The English README is in the repository root; Russian, Polish, Belarusian and German versions are in `docs/`
 
 ### Fixed
 - **Spelling and grammar in translated READMEs** — Corrected a gender-agreement error and a Russian-calque word in the Belarusian README, a comma splice in the German README, and a missing article plus an omitted German mention in the English README
@@ -67,32 +88,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] — 2026-11-12
 
-## [0.1.1] вЂ” 2026-11-12
-
 ### Added
-- **Marketplace integration support** вЂ” Full support for Home Assistant 2026.11+ built-in Marketplace and HACS for earlier versions
-- **Multi-language interface** вЂ” Translations for Russian (`ru`), English (`en`), Polish (`pl`), and Belarusian (`be`)
+- **Marketplace integration support** — Full support for Home Assistant 2026.11+ built-in Marketplace and HACS for earlier versions
+- **Multi-language interface** — Translations for Russian (`ru`), English (`en`), Polish (`pl`), and Belarusian (`be`)
   - Country and station selection translated
   - Error messages translated
   - Update settings translated
   - Sensor names translated
-- **Brand icon** вЂ” Official Pogoda.by icon with transparent background (256Г—256 and 512Г—512 pixels)
-- **README files in multiple languages** вЂ” Complete setup and troubleshooting guides:
-  - Russian: [README.md](README.md)
-  - English: [README.en.md](docs/README.en.md)
+- **Brand icon** — Pogoda.by icon with transparent background (256×256 and 512×512 pixels)
+- **README files in multiple languages** — Complete setup and troubleshooting guides:
+  - Russian: [README.ru.md](docs/README.ru.md)
+  - English: [README.md](README.md)
   - Polish: [README.pl.md](docs/README.pl.md)
   - Belarusian: [README.be.md](docs/README.be.md)
-- **HACS configuration** вЂ” Ready for Marketplace/HACS installation with `hacs.json`
-- **License** вЂ” MIT license for open-source distribution
-- **GitHub Actions workflow** вЂ” Automated testing and syntax checking on every commit
-- **Release notes** вЂ” Multilingual release documentation in `RELEASE_NOTES.md`
-- **Publication guide** вЂ” Step-by-step instructions in `HACS.md` for publishing to Marketplace/HACS
+- **HACS configuration** — Ready for Marketplace/HACS installation with `hacs.json`
+- **License** — MIT license for open-source distribution
+- **GitHub Actions workflow** — Automated testing and syntax checking on every commit
+- **Publication guide** — Step-by-step instructions in `HACS.md` for publishing to Marketplace/HACS
 
 ### Changed
-- **Default update interval** вЂ” Increased from 10 minutes to **1 hour (60 minutes)**
+- **Default update interval** — Increased from 10 minutes to **1 hour (60 minutes)**
   - User-configured intervals are preserved during updates
   - Configurable from 5 to 180 minutes
-- **Documentation structure** вЂ” Reorganized README with separate sections for Marketplace and HACS
+- **Documentation structure** — Reorganized README with separate sections for Marketplace and HACS
 
 ### Technical Details
 - **Sensors**: Temperature, atmospheric pressure, pressure trend, wind speed, wind direction, weather description, observation time, station metadata, humidity (optional), wind gusts (optional), visibility (optional)
@@ -102,12 +120,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Dependencies**: Zero production dependencies (uses only Python standard library and Home Assistant built-ins)
 
 ### Testing
-- **36 automated tests** вЂ” 100% pass rate
+- **36 automated tests** — 100% pass rate
   - 25 tests for JSON catalogue and RSS parsing
   - 7 tests for HTTP error handling
   - 4 tests for bundle consistency
-- **Syntax validation** вЂ” All Python files compile successfully
-- **Localization checks** вЂ” Translation keys synchronized across all 4 languages
+- **Syntax validation** — All Python files compile successfully
+- **Localization checks** — Translation keys synchronized across all 4 languages
 
 ### Known Limitations
 - Full installation validation in a running Home Assistant instance has not been performed
@@ -125,69 +143,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## Versions
+## Upgrade to 0.2.0
 
-### Semver Compatibility
-- **Current version**: 0.1.4 (alpha/preview)
-- **Target minimum**: Home Assistant 2025.1.0
-- **Minimum Python**: 3.11 (as per Home Assistant requirements)
+1. Update the whole integration, including `frontend`, `brand` and `translations`, and restart Home Assistant. Existing station entries are retained.
+2. Refresh the browser. Add **Pogoda.by Card** to the desired dashboard and select a station.
+3. With UI-managed resources, the card module registers automatically and a previous manual `/local/pogoda-by-card.js` record is migrated. Other resources are preserved.
+4. With YAML-managed resources, add `/pogoda_by/pogoda-by-card.js?v=0.2.0` with `type: module`, reload resources and refresh the browser. The integration does not edit user YAML.
 
-### Release Timeline
-- **0.1.4** (2026-11-13) — German translation and README, translated READMEs moved into `docs/`
-- **0.1.1** (2026-11-12) вЂ” Initial preview release with full Marketplace/HACS support
-
----
-
-## Migration Notes
-
-### From Unreleased/Development
-If upgrading from development versions:
-1. The default update interval has changed from 10 to 60 minutes
-2. Your custom intervals are automatically preserved
-3. No configuration changes required beyond the interval setting if desired
-
-### Between Marketplace and HACS Installation
-To switch from one installation method to another:
-1. Add the same repository to the target platform (Marketplace or HACS)
-2. Install/download the integration
-3. No need to delete the existing Pogoda.by entry in Devices & services
-4. The integration will update automatically
-
----
-
-## Contributing
-
-Found an issue or have a suggestion? Please open an issue at:
-https://github.com/Toropyga/pogoda_by/issues
-
----
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-## References
-
-### Official Documentation
-- [Marketplace Integration Guide](https://www.home-assistant.io/integrations/marketplace/)
-- [HACS Publishing Requirements](https://www.hacs.xyz/docs/publish/integration/)
-- [Home Assistant Config Flow Documentation](https://contributors.home-assistant.io/core/integrations/config-entries/)
-
-### Data Source
-- **Provider**: Belhydromet (Р‘РµР»РіРёРґСЂРѕРјРµС‚)
-- **API**: https://pogoda.by/api/v2/weather-fact/all-cities
-- **RSS**: https://pogoda.by/rss/weather
-- **Website**: https://pogoda.by
-
-### Related Repositories
-- Home Assistant Core: https://github.com/home-assistant/core
-- HACS: https://github.com/hacs/integration
-- Marketplace Integration Examples: https://github.com/search?q=topic:homeassistant-integration
-
----
-
-**Last updated**: 2026-11-13  
-**Maintained by**: [@Toropyga](https://github.com/Toropyga)
-
+See the [card guide](docs/CARD.md) or [Russian guide](docs/CARD.ru.md). The card displays observations; temperature history requires Recorder/History. No forecast is provided.
