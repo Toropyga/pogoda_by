@@ -4,7 +4,6 @@
 
 Eine benutzerdefinierte Integration für Home Assistant. Sie ruft die aktuelle Wetterbeobachtung von Belhydromet per RSS ab; die Liste der Länder und Stationen stammt aus einer JSON-API. Es ist kein API-Schlüssel erforderlich. Wettervorhersagen werden nicht bereitgestellt.
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/hacs/integration)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 ![Version](https://img.shields.io/badge/version-v0.1.4-blue.svg)
 

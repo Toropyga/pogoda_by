@@ -4,7 +4,6 @@
 
 Пользовательская интеграция для Home Assistant. Получает фактическую погоду Белгидромета через RSS, а список стран и станций — через JSON API. Ключ API не нужен. Прогноз погоды не предоставляется.
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/hacs/integration)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 ![Version](https://img.shields.io/badge/version-v0.1.4-blue.svg)
 
