@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Validation
 - 80 offline Python tests (including 28 controlled-clock coordinator/sensor/options scenarios) and 26 card logic tests. These use API/DOM doubles where needed and do not validate a running Home Assistant.
+- GitHub Actions passed on Python 3.11 and 3.12, including unit tests, card logic and syntax checks.
 - No server deployment or Home Assistant restart was performed during validation. See VALIDATION.md for commands and remaining runtime checks.
 
 ---

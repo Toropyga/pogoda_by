@@ -32,6 +32,7 @@
 | `node --check custom_components/pogoda_by/frontend/pogoda-by-card.js` | Успешно; только синтаксис JavaScript. |
 | `node --check tools/test_card.cjs` | Успешно; только синтаксис браузерного проверочного скрипта. |
 | `git diff --check` | Успешно. |
+| GitHub Actions, Python 3.11 и 3.12 | Оба задания Tests прошли после push: [запуск 44511799053](https://github.com/Toropyga/pogoda_by/actions/runs/44511799053). Проверены unit-тесты, логика карточки и синтаксис. |
 | Переводы | Ключи, enum-состояния и ошибки настроек совпадают на en/ru/be/pl/de; strings.json совпадает с en.json; генератор воспроизводит все пять языков. |
 | Существующие имена | Сравнение с HEAD: все прежние описания entity.sensor сохранены в strings.json и пяти переводах. |
 | Идентификаторы | Новые тесты проверяют прежнюю формулу country_station_key для всех 11 существующих ключей и неизменную идентичность устройства; добавлены только freshness и last_successful_fetch. |
@@ -42,7 +43,7 @@
 
 ## Оставшиеся ограничения
 
-Не выполнялись hassfest/HACS-валидатор, CI-матрица Python 3.11/3.12, установка, перезапуск, реальный цикл ConfigFlow/OptionsFlow, выгрузка/перезагрузка записи в HA, реальная запись состояний по событию таймера, отображение переводов и диагностики, Recorder и браузерная проверка карточки. Отдельные проверки синтаксиса перечислены отдельно от функциональных тестов. Перед будущим развёртыванием остаётся проверить это на тестовом HA; такая установка не входит в текущую задачу.
+Не выполнялись hassfest/HACS-валидатор, установка, перезапуск, реальный цикл ConfigFlow/OptionsFlow, выгрузка/перезагрузка записи в HA, реальная запись состояний по событию таймера, отображение переводов и диагностики, Recorder и браузерная проверка карточки. Отдельные проверки синтаксиса перечислены отдельно от функциональных тестов. Перед будущим развёртыванием остаётся проверить это на тестовом HA; такая установка не входит в текущую задачу.
 
 Использованные интерфейсы сверены с первичными источниками: [DataUpdateCoordinator](https://github.com/home-assistant/core/blob/dev/homeassistant/helpers/update_coordinator.py), [таймеры HA](https://contributors.home-assistant.io/core/integrations/events/), [сенсоры enum](https://github.com/home-assistant/developers.home-assistant/blob/master/docs/core/entity/sensor.md), [переводы интеграций](https://contributors.home-assistant.io/core/integrations/translations/). Сверка исходников не заменяет runtime-тест.
 
