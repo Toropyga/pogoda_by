@@ -112,7 +112,11 @@ def parse_timestamp(value: str | None) -> datetime | None:
         except (ValueError, TypeError, OverflowError):
             return None
     # Do not guess whether a date without an offset uses UTC or station time.
-    return result.astimezone(UTC) if result.tzinfo is not None else None
+    try:
+        return result.astimezone(UTC) if result.tzinfo is not None else None
+    except (ValueError, OverflowError):
+        # An extreme date plus its offset may fall outside datetime's UTC range.
+        return None
 
 
 def _text(value: str) -> str:

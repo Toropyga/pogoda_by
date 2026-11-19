@@ -13,6 +13,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.2] - 2026-11-19
+
+### Added
+- Configurable maximum observation age: 6 hours by default, whole hours from 1 to 168. Existing entries inherit the default without changing station identity or polling options.
+- Local observation-expiry notifications between RSS polls, with no diagnostic HTTP requests.
+- Diagnostic enum sensor `freshness` and timestamp sensor `last_successful_fetch`, translated in English, Russian, Belarusian, Polish and German.
+
+### Fixed
+- The weather-text sensor `condition` is created for valid observations even when `Погода:` is empty or absent. It remains available with an empty string when freshness and request checks pass; numeric missing fields are unchanged.
+- Weather measurements become unavailable for stale, undated, invalid or substantially future observations. Successful RSS retrieval no longer implies fresh weather.
+- Cached observation time, freshness and last successful reception remain available during source failures. Repeated old RSS updates reception time without extending observation freshness.
+- Extreme RSS dates whose offsets overflow UTC conversion are safely treated as undated; the standalone parser retains no freshness policy.
+
+### Changed
+- Combined integration/card version is 0.2.2. Existing entity keys, names, unique IDs, station identity and polling interval are preserved. Card behavior is unchanged; its version/resource URL is aligned with the package.
+- Updated all five READMEs and the translation generator, including German generation and enum state labels.
+
+### Validation
+- 80 offline Python tests (including 28 controlled-clock coordinator/sensor/options scenarios) and 26 card logic tests. These use API/DOM doubles where needed and do not validate a running Home Assistant.
+- No server deployment or Home Assistant restart was performed during validation. See VALIDATION.md for commands and remaining runtime checks.
+
+---
+
 ## [0.2.1] - 2026-11-13
 
 ### Changed

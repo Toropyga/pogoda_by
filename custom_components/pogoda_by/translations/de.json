@@ -32,11 +32,16 @@
     "step": {
       "init": {
         "title": "Abrufeinstellungen",
-        "description": "Ruft in diesem Intervall eine RSS-Antwort pro Station ab. Der Anbieter aktualisiert die Beobachtungen möglicherweise seltener.",
+        "description": "Ruft in diesem Intervall eine RSS-Antwort pro Station ab. Der Anbieter aktualisiert die Beobachtungen möglicherweise seltener. Das maximale Alter beträgt standardmäßig 6 Stunden; ältere Messwerte und Messwerte ohne Datum sind nicht verfügbar.",
         "data": {
-          "update_interval": "Aktualisierungsintervall (Minuten)"
+          "update_interval": "Aktualisierungsintervall (Minuten)",
+          "max_observation_age": "Maximales Beobachtungsalter (Stunden)"
         }
       }
+    },
+    "error": {
+      "invalid_max_observation_age": "Geben Sie eine ganze Stundenzahl von 1 bis 168 ein.",
+      "invalid_interval": "Geben Sie eine ganze Minutenzahl von 5 bis 180 ein."
     }
   },
   "entity": {
@@ -73,6 +78,17 @@
       },
       "visibility": {
         "name": "Sichtweite"
+      },
+      "freshness": {
+        "name": "Aktualität der Beobachtung",
+        "state": {
+          "fresh": "Aktuell",
+          "stale": "Veraltet",
+          "unknown": "Unbekannt"
+        }
+      },
+      "last_successful_fetch": {
+        "name": "Letzter erfolgreicher Beobachtungsabruf"
       }
     }
   }

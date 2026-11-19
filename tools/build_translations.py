@@ -1,4 +1,4 @@
-"""Generate matching English, Russian, Belarusian and Polish UI strings."""
+"""Generate matching English, Russian, Belarusian, Polish and German UI strings."""
 
 import json
 from pathlib import Path
@@ -55,7 +55,102 @@ TRANSLATIONS = {
         "Ta stacja została już dodana.", "Ustawienia aktualizacji", "Dane pogodowe są pobierane jednym zapytaniem RSS dla każdej stacji. Stacja może publikować nowe pomiary rzadziej.", "Interwał aktualizacji (minuty)",
         ["Temperatura", "Ciśnienie atmosferyczne", "Tendencja ciśnienia", "Prędkość wiatru", "Kierunek wiatru", "Pogoda", "Czas obserwacji", "Stacja meteorologiczna", "Wilgotność", "Porywy wiatru", "Widoczność"],
     ),
+    "de": translation(
+        'Land auswählen',
+        'Wählen Sie ein Land aus dem aktuellen Pogoda.by-Katalog. Wenn das Laden fehlschlägt, senden Sie das Formular erneut ab, um es noch einmal zu versuchen.',
+        'Land',
+        'Wetterstation auswählen',
+        'Wählen Sie eine Station in {country}. Die Zahl in Klammern ist die Stations-ID.',
+        'Wetterstation',
+        ['Verbindung zu Pogoda.by nicht möglich. Bitte versuchen Sie es erneut.', 'Der Stationskatalog hat ein nicht unterstütztes Format oder ist leer.', 'Für diese Station sind derzeit keine unterstützten Wetterdaten verfügbar. Versuchen Sie es erneut oder wählen Sie eine andere Station.', 'Wählen Sie ein Land aus der Liste.', 'Wählen Sie eine Station aus der Liste.'],
+        'Diese Station wurde bereits hinzugefügt.',
+        'Abrufeinstellungen',
+        'Ruft in diesem Intervall eine RSS-Antwort pro Station ab. Der Anbieter aktualisiert die Beobachtungen möglicherweise seltener.',
+        'Aktualisierungsintervall (Minuten)',
+        ['Temperatur', 'Luftdruck', 'Drucktendenz', 'Windgeschwindigkeit', 'Windrichtung', 'Wetter', 'Beobachtungszeit', 'Station', 'Luftfeuchtigkeit', 'Windböen', 'Sichtweite'],
+    ),
 }
+
+
+FRESHNESS_TRANSLATIONS = {
+    "en": [
+        "Maximum observation age (hours)",
+        "Observation freshness",
+        "Last successful observation fetch",
+        [
+            "Fresh",
+            "Stale",
+            "Unknown"
+        ],
+        "Enter a whole number of hours from 1 to 168.",
+        "Enter a whole number of minutes from 5 to 180.",
+        "Observation age defaults to 6 hours; older or undated measurements are unavailable."
+    ],
+    "ru": [
+        "Допустимый возраст наблюдения (часы)",
+        "Свежесть наблюдения",
+        "Последнее успешное получение наблюдения",
+        [
+            "Свежие",
+            "Устаревшие",
+            "Неизвестно"
+        ],
+        "Введите целое число часов от 1 до 168.",
+        "Введите целое число минут от 5 до 180.",
+        "Допустимый возраст по умолчанию — 6 часов; более старые измерения и измерения без даты недоступны."
+    ],
+    "be": [
+        "Дапушчальны ўзрост назірання (гадзіны)",
+        "Свежасць назірання",
+        "Апошняе паспяховае атрыманне назірання",
+        [
+            "Свежыя",
+            "Састарэлыя",
+            "Невядома"
+        ],
+        "Увядзіце цэлы лік гадзін ад 1 да 168.",
+        "Увядзіце цэлы лік хвілін ад 5 да 180.",
+        "Дапушчальны ўзрост па змаўчанні — 6 гадзін; старэйшыя вымярэнні і вымярэнні без даты недаступныя."
+    ],
+    "pl": [
+        "Dopuszczalny wiek obserwacji (godziny)",
+        "Aktualność obserwacji",
+        "Ostatnie udane pobranie obserwacji",
+        [
+            "Aktualne",
+            "Nieaktualne",
+            "Nieznane"
+        ],
+        "Wpisz całkowitą liczbę godzin od 1 do 168.",
+        "Wpisz całkowitą liczbę minut od 5 do 180.",
+        "Domyślny dopuszczalny wiek to 6 godzin; starsze pomiary oraz pomiary bez daty są niedostępne."
+    ],
+    "de": [
+        "Maximales Beobachtungsalter (Stunden)",
+        "Aktualität der Beobachtung",
+        "Letzter erfolgreicher Beobachtungsabruf",
+        [
+            "Aktuell",
+            "Veraltet",
+            "Unbekannt"
+        ],
+        "Geben Sie eine ganze Stundenzahl von 1 bis 168 ein.",
+        "Geben Sie eine ganze Minutenzahl von 5 bis 180 ein.",
+        "Das maximale Alter beträgt standardmäßig 6 Stunden; ältere Messwerte und Messwerte ohne Datum sind nicht verfügbar."
+    ]
+}
+
+for language, (age, freshness, fetched, states, age_error, interval_error, description) in FRESHNESS_TRANSLATIONS.items():
+    data = TRANSLATIONS[language]
+    data["options"]["step"]["init"]["data"]["max_observation_age"] = age
+    data["options"]["step"]["init"]["description"] += " " + description
+    data["options"]["error"] = {
+        "invalid_max_observation_age": age_error, "invalid_interval": interval_error,
+    }
+    data["entity"]["sensor"].update({
+        "freshness": {"name": freshness, "state": dict(zip(("fresh", "stale", "unknown"), states, strict=True))},
+        "last_successful_fetch": {"name": fetched},
+    })
 
 if __name__ == "__main__":
     (BASE / "translations").mkdir(exist_ok=True)

@@ -32,11 +32,16 @@
     "step": {
       "init": {
         "title": "Polling settings",
-        "description": "Fetch one RSS response per station at this interval. The provider may update observations less frequently.",
+        "description": "Fetch one RSS response per station at this interval. The provider may update observations less frequently. Observation age defaults to 6 hours; older or undated measurements are unavailable.",
         "data": {
-          "update_interval": "Update interval (minutes)"
+          "update_interval": "Update interval (minutes)",
+          "max_observation_age": "Maximum observation age (hours)"
         }
       }
+    },
+    "error": {
+      "invalid_max_observation_age": "Enter a whole number of hours from 1 to 168.",
+      "invalid_interval": "Enter a whole number of minutes from 5 to 180."
     }
   },
   "entity": {
@@ -73,6 +78,17 @@
       },
       "visibility": {
         "name": "Visibility"
+      },
+      "freshness": {
+        "name": "Observation freshness",
+        "state": {
+          "fresh": "Fresh",
+          "stale": "Stale",
+          "unknown": "Unknown"
+        }
+      },
+      "last_successful_fetch": {
+        "name": "Last successful observation fetch"
       }
     }
   }

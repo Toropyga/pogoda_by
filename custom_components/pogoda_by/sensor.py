@@ -55,6 +55,14 @@ SENSORS: tuple[SensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
     ),
     SensorEntityDescription(
+        key="freshness", translation_key="freshness", device_class=SensorDeviceClass.ENUM,
+        options=["fresh", "stale", "unknown"], entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    SensorEntityDescription(
+        key="last_successful_fetch", translation_key="last_successful_fetch",
+        device_class=SensorDeviceClass.TIMESTAMP, entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    SensorEntityDescription(
         key="humidity", translation_key="humidity", device_class=SensorDeviceClass.HUMIDITY,
         native_unit_of_measurement=PERCENTAGE, state_class=SensorStateClass.MEASUREMENT,
     ),
@@ -84,7 +92,11 @@ async def async_setup_entry(
         entities = []
         for description in SENSORS:
             key = description.key
-            if key not in added and (key == "station" or key in coordinator.data.values):
+            if key not in added and (
+                description.entity_category == EntityCategory.DIAGNOSTIC
+                or key == "condition"
+                or key in coordinator.data.values
+            ):
                 added.add(key)
                 entities.append(PogodaBySensor(coordinator, description))
         if entities:
@@ -118,15 +130,33 @@ class PogodaBySensor(CoordinatorEntity[PogodaByCoordinator], SensorEntity):
 
     @property
     def available(self) -> bool:
-        if self.entity_description.key == "station":
+        if self.entity_description.entity_category == EntityCategory.DIAGNOSTIC:
             return True
-        return super().available and self.coordinator.data.values.get(self.entity_description.key) is not None
+        return (
+            super().available
+            and self.coordinator.freshness == "fresh"
+            and self.coordinator.data is not None
+            and (
+                self.entity_description.key == "condition"
+                or self.coordinator.data.values.get(self.entity_description.key) is not None
+            )
+        )
 
     @property
     def native_value(self):
-        if self.entity_description.key == "station":
+        key = self.entity_description.key
+        if key == "station":
             return self.coordinator.station["name"][:255]
-        value = self.coordinator.data.values.get(self.entity_description.key)
+        if key == "freshness":
+            return self.coordinator.freshness
+        if key == "last_successful_fetch":
+            return self.coordinator.last_successful_fetch
+        if self.coordinator.data is None:
+            return None
+        # Empty weather text is a valid state of an otherwise usable observation.
+        if key == "condition":
+            return self.coordinator.data.values.get(key, "")[:255]
+        value = self.coordinator.data.values.get(key)
         return value[:255] if isinstance(value, str) else value
 
     @property
@@ -137,6 +167,13 @@ class PogodaBySensor(CoordinatorEntity[PogodaByCoordinator], SensorEntity):
             return {**station, "observation_url": self._attr_device_info["configuration_url"]}
         data = self.coordinator.data
         attributes: dict[str, Any] = {"station_id": station[CONF_STATION]}
+        if key == "freshness":
+            attributes.update(
+                last_request_success=self.coordinator.last_update_success,
+                max_observation_age_hours=self.coordinator.max_observation_age.total_seconds() / 3600,
+            )
+        if data is None:
+            return attributes
         if key == "pressure":
             attributes["status"] = data.values.get("pressure_trend")
         elif key == "wind_speed":
@@ -144,7 +181,7 @@ class PogodaBySensor(CoordinatorEntity[PogodaByCoordinator], SensorEntity):
             speed = data.values.get("wind_speed")
             attributes["speed_kmh"] = round(speed * 3.6, 2) if speed is not None else None
         elif key == "condition":
-            attributes["description"] = data.values.get("condition")
+            attributes["description"] = data.values.get("condition", "")
             attributes["raw_description"] = data.description
         elif key == "observation_time":
             attributes["published"] = data.published

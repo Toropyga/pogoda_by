@@ -13,8 +13,9 @@ from homeassistant.helpers import selector
 
 from .api import CannotConnect, PogodaByClient
 from .const import (
-    CONF_COUNTRY, CONF_INTERVAL, CONF_STATION, DEFAULT_INTERVAL, DOMAIN,
-    MAX_INTERVAL, MIN_INTERVAL,
+    CONF_COUNTRY, CONF_INTERVAL, CONF_MAX_OBSERVATION_AGE, CONF_STATION,
+    DEFAULT_INTERVAL, DEFAULT_MAX_OBSERVATION_AGE, DOMAIN,
+    MAX_INTERVAL, MAX_MAX_OBSERVATION_AGE, MIN_INTERVAL, MIN_MAX_OBSERVATION_AGE,
 )
 from .parser import InvalidData, Station
 
@@ -100,15 +101,30 @@ class PogodaByConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class PogodaByOptionsFlow(config_entries.OptionsFlow):
-    """Change the interval without editing YAML."""
+    """Change polling and observation freshness without editing YAML."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
+        errors: dict[str, str] = {}
         if user_input is not None:
-            return self.async_create_entry(title="", data=user_input)
+            # Validate submitted values as well as the displayed form schema.
+            # Reject booleans and fractional hours instead of silently truncating.
+            for key, minimum, maximum in (
+                (CONF_INTERVAL, MIN_INTERVAL, MAX_INTERVAL),
+                (CONF_MAX_OBSERVATION_AGE, MIN_MAX_OBSERVATION_AGE, MAX_MAX_OBSERVATION_AGE),
+            ):
+                value = user_input.get(key)
+                if type(value) is not int or not minimum <= value <= maximum:
+                    errors[key] = "invalid_interval" if key == CONF_INTERVAL else "invalid_max_observation_age"
+            if not errors:
+                return self.async_create_entry(title="", data={**self.config_entry.options, **user_input})
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema({
                 vol.Required(CONF_INTERVAL, default=self.config_entry.options.get(CONF_INTERVAL, DEFAULT_INTERVAL)):
-                    vol.All(vol.Coerce(int), vol.Range(min=MIN_INTERVAL, max=MAX_INTERVAL)),
+                    vol.All(int, vol.Range(min=MIN_INTERVAL, max=MAX_INTERVAL)),
+                vol.Required(CONF_MAX_OBSERVATION_AGE, default=self.config_entry.options.get(
+                    CONF_MAX_OBSERVATION_AGE, DEFAULT_MAX_OBSERVATION_AGE,
+                )): vol.All(int, vol.Range(min=MIN_MAX_OBSERVATION_AGE, max=MAX_MAX_OBSERVATION_AGE)),
             }),
+            errors=errors,
         )

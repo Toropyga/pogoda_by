@@ -1,7 +1,7 @@
-/* Pogoda.by Card 0.2.1 | MIT | Bundled with the Pogoda.by integration. */
+/* Pogoda.by Card 0.2.2 | MIT | Bundled with the Pogoda.by integration. */
 (() => {
   "use strict";
-  const VERSION = "0.2.1";
+  const VERSION = "0.2.2";
   const FIELDS = ["temperature", "pressure", "pressure_trend", "wind_speed", "wind_direction", "condition", "observation_time", "station", "humidity", "wind_gust", "visibility"];
   const DEFAULTS = { show_details: true, show_graph: true, show_observation: true, compact: false, hours_to_show: 24, stale_after: 180, language: "auto" };
   const TEXT = {

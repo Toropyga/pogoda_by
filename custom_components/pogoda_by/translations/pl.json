@@ -32,11 +32,16 @@
     "step": {
       "init": {
         "title": "Ustawienia aktualizacji",
-        "description": "Dane pogodowe są pobierane jednym zapytaniem RSS dla każdej stacji. Stacja może publikować nowe pomiary rzadziej.",
+        "description": "Dane pogodowe są pobierane jednym zapytaniem RSS dla każdej stacji. Stacja może publikować nowe pomiary rzadziej. Domyślny dopuszczalny wiek to 6 godzin; starsze pomiary oraz pomiary bez daty są niedostępne.",
         "data": {
-          "update_interval": "Interwał aktualizacji (minuty)"
+          "update_interval": "Interwał aktualizacji (minuty)",
+          "max_observation_age": "Dopuszczalny wiek obserwacji (godziny)"
         }
       }
+    },
+    "error": {
+      "invalid_max_observation_age": "Wpisz całkowitą liczbę godzin od 1 do 168.",
+      "invalid_interval": "Wpisz całkowitą liczbę minut od 5 do 180."
     }
   },
   "entity": {
@@ -73,6 +78,17 @@
       },
       "visibility": {
         "name": "Widoczność"
+      },
+      "freshness": {
+        "name": "Aktualność obserwacji",
+        "state": {
+          "fresh": "Aktualne",
+          "stale": "Nieaktualne",
+          "unknown": "Nieznane"
+        }
+      },
+      "last_successful_fetch": {
+        "name": "Ostatnie udane pobranie obserwacji"
       }
     }
   }

@@ -1,11 +1,11 @@
-# Pogoda.by dla Home Assistant — 0.2.1
+# Pogoda.by dla Home Assistant — 0.2.2
 
 [Русский](README.ru.md) | [English](../README.md) | [Polski](README.pl.md) | [Беларуская](README.be.md) | [Deutsch](README.de.md)
 
 Niestandardowa integracja Home Assistant. Pobiera aktualne obserwacje pogodowe z serwisu Belhydromet przez RSS, a listę krajów i stacji — przez API w formacie JSON. Klucz API nie jest wymagany. Integracja nie udostępnia prognozy pogody.
 
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
-![Version](https://img.shields.io/badge/version-v0.2.1-blue.svg)
+![Version](https://img.shields.io/badge/version-v0.2.2-blue.svg)
 
 > ⚠️ **Ważna uwaga:** Integracja udostępnia pełne informacje dla stacji meteorologicznych **na Białorusi**. Dla stacji w innych krajach informacje są często **niedostępne lub niekompletne**, ponieważ usługa Pogoda.by jest zorientowana przede wszystkim na dane Belhydrometu (Białoruś). Jeśli wybrałeś stację z innego kraju i czujniki wykazują błąd lub stają się niedostępne, jest to spowodowane brakiem dostępu do danych z usługi Pogoda.by.
 
@@ -83,7 +83,7 @@ Obraz źródłowy zapisano jako `assets/pogoda-by-source.png`. Aby ponownie przy
 
 ## Karta na pulpicie
 
-**Pogoda.by Card 0.2.1** jest instalowana i aktualizowana razem z integracją. Podczas instalacji ręcznej skopiuj cały katalog `custom_components/pogoda_by`, łącznie z `frontend`, `brand` i `translations`. Nie jest potrzebne drugie repozytorium karty ani osobne kopiowanie JavaScript do `/config/www`.
+**Pogoda.by Card 0.2.2** jest instalowana i aktualizowana razem z integracją. Podczas instalacji ręcznej skopiuj cały katalog `custom_components/pogoda_by`, łącznie z `frontend`, `brand` i `translations`. Nie jest potrzebne drugie repozytorium karty ani osobne kopiowanie JavaScript do `/config/www`.
 
 Po instalacji lub aktualizacji uruchom ponownie Home Assistant i odśwież przeglądarkę. W edytorze pulpitu wybierz **Dodaj kartę → Pogoda.by Card**, a następnie skonfigurowaną stację. Użytkownik sam umieszcza kartę na wybranym pulpicie; zasób JavaScript jest rejestrowany automatycznie przy standardowym zarządzaniu zasobami w interfejsie.
 
@@ -116,7 +116,7 @@ compact: true
 
 ### Zasoby YAML
 
-Przy **zasobach zarządzanych w YAML** (`lovelace.resource_mode: yaml`) dodaj `/pogoda_by/pogoda-by-card.js?v=0.2.1` z `type: module` do istniejącej listy zasobów, przeładuj zasoby i odśwież przeglądarkę. Pulpit YAML może korzystać z zasobów zarządzanych w interfejsie; o automatycznej rejestracji decyduje tryb zarządzania zasobami.
+Przy **zasobach zarządzanych w YAML** (`lovelace.resource_mode: yaml`) dodaj `/pogoda_by/pogoda-by-card.js?v=0.2.2` z `type: module` do istniejącej listy zasobów, przeładuj zasoby i odśwież przeglądarkę. Pulpit YAML może korzystać z zasobów zarządzanych w interfejsie; o automatycznej rejestracji decyduje tryb zarządzania zasobami.
 
 Dodaj poniższy wpis do `configuration.yaml`, łącząc go z istniejącymi sekcjami `lovelace` i `resources` oraz zachowując pozostałe zasoby:
 
@@ -124,13 +124,13 @@ Dodaj poniższy wpis do `configuration.yaml`, łącząc go z istniejącymi sekcj
 lovelace:
   resource_mode: yaml
   resources:
-    - url: /pogoda_by/pogoda-by-card.js?v=0.2.1
+    - url: /pogoda_by/pogoda-by-card.js?v=0.2.2
       type: module
 ```
 
 Po aktualizacji integracji uruchom ponownie Home Assistant. Po zmianie zasobów YAML wykonaj akcję `lovelace.reload_resources` lub uruchom ponownie Home Assistant. Odśwież przeglądarkę przez **Ctrl+F5** i ponownie otwórz **Dodaj kartę**.
 
-Aby sprawdzić zasób, otwórz `/pogoda_by/pogoda-by-card.js?v=0.2.1` pod adresem swojego Home Assistant. Powinien zostać wyświetlony JavaScript. Przy błędzie **404** sprawdź obecność `/config/custom_components/pogoda_by/frontend/pogoda-by-card.js` oraz poprawne uruchomienie integracji.
+Aby sprawdzić zasób, otwórz `/pogoda_by/pogoda-by-card.js?v=0.2.2` pod adresem swojego Home Assistant. Powinien zostać wyświetlony JavaScript. Przy błędzie **404** sprawdź obecność `/config/custom_components/pogoda_by/frontend/pogoda-by-card.js` oraz poprawne uruchomienie integracji.
 
 Aktualizacja zachowuje skonfigurowane stacje i zmienia URL zasobu karty. W trybie storage poprzedni ręczny wpis `/local/pogoda-by-card.js` jest przenoszony automatycznie, a duplikaty znanych lokalnych adresów karty są scalane. Zmienione identyfikatory entity_id sensorów są obsługiwane.
 
@@ -139,6 +139,8 @@ Aktualizacja zachowuje skonfigurowane stacje i zmienia URL zasobu karty. W trybi
 ## Sensory
 
 Sensor jest tworzony, gdy odpowiadające mu pole pojawi się po raz pierwszy w RSS. Jeśli pole pojawi się później, ponowne uruchomienie nie jest potrzebne. Jeśli wcześniej dostępne pole zniknie, sensor stanie się niedostępny; brakujących odczytów nie zastępuje się zerem.
+
+**Wyjątek dla opisu pogody:** sensor `condition` jest tworzony zawsze. Dla aktualnej i poprawnie pobranej obserwacji pusta sekcja `Погода:` lub jej brak oznacza dostępny sensor z pustym ciągiem znaków (`""`). Inne brakujące pola pozostają niedostępne. Kontrola aktualności i błędów źródła nadal dotyczy tego sensora.
 
 | Pole | Jednostka / typ | Dodatkowe informacje |
 | --- | --- | --- |
@@ -162,7 +164,25 @@ Domyślny interwał aktualizacji wynosi **1 godzinę (60 minut)**. Przycisk **Ko
 
 Po aktualizacji wartość domyślna jest stosowana do wpisów bez zapisanego interwału. Jeśli interwał zapisano przez **Konfiguruj**, pozostaje on bez zmian; aby ustawić aktualizację co godzinę, wpisz ręcznie **60**.
 
-W przypadku błędu HTTP, przekroczenia limitu czasu lub nieprawidłowej odpowiedzi RSS sensory pogodowe stają się niedostępne. Home Assistant automatycznie ponawia aktualizację. Diagnostyczny sensor stacji przechowuje metadane lokalnie i pozostaje dostępny. Poprawna odpowiedź ze starą datą obserwacji nie jest traktowana jako błąd sieciowy: sprawdzaj czas obserwacji. Integracja nie gwarantuje, że sama stacja publikuje nowe pomiary co godzinę.
+## Aktualność obserwacji
+
+W **Ustawienia → Urządzenia i usługi → Pogoda.by → Konfiguruj** ustaw **Dopuszczalny wiek obserwacji (godziny)**: liczba całkowita od **1 do 168**. Domyślnie jest to **6 godzin**, także dla istniejących wpisów bez tego parametru. Stacja, zapisany interwał i dotychczasowe unique_id pozostają zachowane; migracja wpisu nie jest potrzebna.
+
+Wiek jest obliczany na podstawie czasu stacji `observation_time` (RSS `pubDate`) w UTC, a nie czasu pobrania czy `last_updated`. Dokładnie na granicy obserwacja pozostaje aktualna; po jej przekroczeniu wszystkie pomiary pogodowe mają stan `unavailable`. Brak daty, błędna data lub data bez przesunięcia strefy czasowej oznacza nieznaną aktualność i niedostępne pomiary. Wartości nie są zastępowane zerami. Jawne przesunięcia są przeliczane na UTC; strefa zapisana w metadanych stacji nie służy do zgadywania brakującego przesunięcia.
+
+Data ponad **5 minut w przyszłości względem odbioru** również oznacza nieznaną aktualność. Tolerancja zegara wynosi 5 minut. Sam upływ czasu nie zatwierdza odrzuconej daty: potrzebna jest następna poprawna odpowiedź z datą w dopuszczalnym zakresie. Oryginalny czas stacji nadal jest widoczny w `observation_time`.
+
+Lokalny zegar zmienia aktualność i dostępność między odpytywaniami, również podczas awarii sieci. Ponowne pobranie tego samego RSS nie wydłuża aktualności. Diagnostyka nie wykonuje dodatkowych zapytań HTTP. `stale_after` karty jest osobnym ostrzeżeniem w minutach (domyślnie 180), niezależnym od dostępności integracji.
+
+Sensory diagnostyczne powstają także po pierwszej odpowiedzi bez daty:
+
+| Klucz | Przeznaczenie |
+| --- | --- |
+| `freshness` | Enum `fresh`, `stale`, `unknown`, tłumaczony przez Home Assistant. Dotyczy ostatniej odczytanej obserwacji niezależnie od powodzenia zapytania. Atrybuty: `last_request_success` i `max_observation_age_hours`. |
+| `last_successful_fetch` | Czas UTC zakończenia pobierania i parsowania obsługiwanej obserwacji, również powtórzonej, starej lub bez daty. Błędy HTTP, przekroczenie czasu i niepoprawny RSS nie zmieniają czasu. Nie potwierdza aktualności. |
+| `observation_time` | Czas obserwacji stacji, zachowany przy awarii źródła; nieznany, jeśli ostatnia odczytana odpowiedź nie zawiera poprawnej daty. |
+
+Przy awarii źródła pomiary są niedostępne, a diagnostyka zachowuje ostatnie dane; obserwacja nadal może się zestarzeć. Metadane stacji pozostają dostępne. Dane diagnostyczne są przechowywane w pamięci podczas załadowania wpisu; po uruchomieniu nadal wymagane jest pierwsze udane pobranie. Poprawny RSS nie gwarantuje aktualnej pogody. Aktualności bieżących danych źródła nie badano w tej zmianie.
 
 Encja `weather` z prognozą nie jest tworzona. Obserwacje można wyświetlać w Pogoda.by Card lub standardowych kartach encji, kafelkach i wykresach sensorów. Odczyty liczbowe mają device_class, state_class i standardowe jednostki Home Assistant.
 
@@ -193,7 +213,7 @@ logger:
 
 ## Stan weryfikacji tej wersji
 
-Dla wersji 0.2.1 lokalnie przeszło **50 testów Pythona i 26 testów logiki karty**, a także kontrole składni, spójności kluczy tłumaczeń i białych znaków. Testy karty używają minimalnego modelu DOM, a testy rejestracji — atrap API Home Assistant; nie potwierdzają działania w rzeczywistym interfejsie Home Assistant.
+Dla wersji 0.2.2 lokalnie przeszło **80 testów Pythona i 26 testów logiki karty**, a także kontrole składni, spójności kluczy tłumaczeń i białych znaków. Testy karty używają minimalnego modelu DOM, a testy koordynatora, sensorów, opcji i rejestracji — atrap API Home Assistant; nie potwierdzają działania w rzeczywistym interfejsie Home Assistant.
 
 Rzeczywiste odpowiedzi API/RSS, rejestracja zasobu, wykres danych Recorder i wygląd na komputerze oraz telefonie wymagają jeszcze sprawdzenia. Szczegóły po rosyjsku: [stan weryfikacji](../VALIDATION.md). Docelowa minimalna wersja to Home Assistant 2025.1; zgodność podczas rzeczywistego uruchomienia nie została jeszcze potwierdzona.
 
