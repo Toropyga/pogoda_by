@@ -6,7 +6,8 @@
         "title": "Select a country",
         "description": "Choose a country from the live Pogoda.by catalogue. If loading fails, submit again to retry.",
         "data": {
-          "country": "Country"
+          "country": "Country",
+          "request_timeout": "Response timeout (seconds)"
         }
       },
       "station": {
@@ -22,7 +23,8 @@
       "invalid_data": "The station catalogue has an unsupported format or is empty.",
       "no_weather": "No supported weather data is currently available for this station. Try again or select another station.",
       "invalid_country": "Select a country from the list.",
-      "invalid_station": "Select a station from the list."
+      "invalid_station": "Select a station from the list.",
+      "invalid_request_timeout": "Enter a whole number of seconds from 1 to 120."
     },
     "abort": {
       "already_configured": "This station has already been added."
@@ -35,13 +37,15 @@
         "description": "Fetch one RSS response per station at this interval. The provider may update observations less frequently. Observation age defaults to 6 hours; older or undated measurements are unavailable.",
         "data": {
           "update_interval": "Update interval (minutes)",
-          "max_observation_age": "Maximum observation age (hours)"
+          "max_observation_age": "Maximum observation age (hours)",
+          "request_timeout": "Response timeout (seconds)"
         }
       }
     },
     "error": {
       "invalid_max_observation_age": "Enter a whole number of hours from 1 to 168.",
-      "invalid_interval": "Enter a whole number of minutes from 5 to 180."
+      "invalid_interval": "Enter a whole number of minutes from 5 to 180.",
+      "invalid_request_timeout": "Enter a whole number of seconds from 1 to 120."
     }
   },
   "entity": {

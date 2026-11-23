@@ -13,6 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.3] - 2026-11-23
+
+### Added
+
+- Set a response timeout per station during setup or under **Configure**. Each HTTP request allows 1–120 seconds for the complete response. The default is 30 seconds for new and existing stations.
+- If the station catalogue times out during setup, increase the timeout on the same form and retry. Saving the option later reloads only the selected station and applies the timeout to its first refresh.
+- The setting and its validation message are available in English, Russian, Belarusian, Polish and German.
+
+---
+
 ## [0.2.2] - 2026-11-19
 
 ### Added

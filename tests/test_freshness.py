@@ -82,7 +82,7 @@ class FlowDouble:
 
 
 class RequiredDouble:
-    def __init__(self, key, default):
+    def __init__(self, key, default=None):
         self.key = key
         self.default = default
 
@@ -496,6 +496,32 @@ class FreshnessTests(unittest.TestCase):
         self.assertEqual(self.client.async_observation.await_count, 1)
 
 
+class SetupTimeoutTests(unittest.TestCase):
+    def test_catalog_retry_and_station_use_selected_timeout(self):
+        module = integration.config_flow
+        flow = module.PogodaByConfigFlow()
+        flow.hass = Mock()
+        flow.async_set_unique_id = AsyncMock()
+        flow._abort_if_unique_id_configured = Mock()
+        station = parser.Station("BY", "26851", "Minsk")
+        with patch.object(module, "PogodaByClient") as client, patch.object(module, "selector"):
+            client.return_value.async_catalog = AsyncMock(side_effect=[
+                CannotConnect("timeout"), {"BY": {"26851": station}},
+            ])
+            client.return_value.async_observation = AsyncMock()
+            first = run(flow.async_step_user())
+            self.assertEqual(first["errors"], {"base": "cannot_connect"})
+            self.assertEqual(client.call_args.kwargs["request_timeout"], 30)
+            retry = run(flow.async_step_user({"request_timeout": 85}))
+            self.assertEqual(client.call_args.kwargs["request_timeout"], 85)
+            self.assertEqual({field.key: field.default for field in retry["data_schema"]},
+                             {"country": None, "request_timeout": 85})
+            run(flow.async_step_user({"country": "BY", "request_timeout": 75}))
+            result = run(flow.async_step_station({"station_id": "26851"}))
+            self.assertEqual(client.call_args.kwargs["request_timeout"], 75)
+            self.assertEqual(result["options"], {"request_timeout": 75})
+
+
 class OptionsTests(unittest.TestCase):
     def setUp(self):
         self.flow = integration.config_flow.PogodaByOptionsFlow()
@@ -505,26 +531,34 @@ class OptionsTests(unittest.TestCase):
     def test_old_entry_displays_six_hours_and_existing_interval(self):
         result = run(self.flow.async_step_init())
         defaults = {marker.key: marker.default for marker in result["data_schema"]}
-        self.assertEqual(defaults, {"update_interval": 17, "max_observation_age": 6})
+        self.assertEqual(defaults, {"update_interval": 17, "max_observation_age": 6, "request_timeout": 30})
         self.assertEqual(self.entry.options, {"update_interval": 17, "other_option": "retained"})
 
     def test_valid_limits_saved_without_losing_other_options(self):
-        for hours in (1, 6, 168):
-            with self.subTest(hours=hours):
-                result = run(self.flow.async_step_init({"update_interval": 17, "max_observation_age": hours}))
+        for hours, timeout in ((1, 1), (6, 75), (168, 120)):
+            with self.subTest(hours=hours, timeout=timeout):
+                options = {"update_interval": 17, "max_observation_age": hours, "request_timeout": timeout}
+                result = run(self.flow.async_step_init(options))
                 self.assertEqual(result["type"], "create_entry")
-                self.assertEqual(result["data"], {"update_interval": 17, "max_observation_age": hours, "other_option": "retained"})
+                self.assertEqual(result["data"], {**options, "other_option": "retained"})
+
+    def test_bad_timeout_is_rejected_by_flow(self):
+        for timeout in (0, 121, True, 4.5, "30"):
+            with self.subTest(timeout=timeout):
+                options = {"update_interval": 17, "max_observation_age": 6, "request_timeout": timeout}
+                result = run(self.flow.async_step_init(options))
+                self.assertEqual(result["errors"], {"request_timeout": "invalid_request_timeout"})
 
     def test_bad_threshold_is_rejected_by_flow(self):
         for hours in (None, 0, -1, 169, 6.5, True, "six", "6", float("nan"), float("inf")):
             with self.subTest(hours=hours):
-                result = run(self.flow.async_step_init({"update_interval": 17, "max_observation_age": hours}))
+                result = run(self.flow.async_step_init({"update_interval": 17, "max_observation_age": hours, "request_timeout": 30}))
                 self.assertEqual(result["type"], "form")
                 self.assertEqual(result["errors"], {"max_observation_age": "invalid_max_observation_age"})
 
     def test_interval_limits_are_still_enforced(self):
         for minutes in (0, 4, 181, True, 6.5):
-            result = run(self.flow.async_step_init({"update_interval": minutes, "max_observation_age": 6}))
+            result = run(self.flow.async_step_init({"update_interval": minutes, "max_observation_age": 6, "request_timeout": 30}))
             self.assertEqual(result["errors"], {"update_interval": "invalid_interval"})
 
 

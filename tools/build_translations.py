@@ -152,6 +152,20 @@ for language, (age, freshness, fetched, states, age_error, interval_error, descr
         "last_successful_fetch": {"name": fetched},
     })
 
+TIMEOUT_TRANSLATIONS = {
+    "en": ("Response timeout (seconds)", "Enter a whole number of seconds from 1 to 120."),
+    "ru": ("Время ожидания ответа (секунды)", "Введите целое число секунд от 1 до 120."),
+    "be": ("Час чакання адказу (секунды)", "Увядзіце цэлы лік секунд ад 1 да 120."),
+    "pl": ("Czas oczekiwania na odpowiedź (sekundy)", "Wpisz całkowitą liczbę sekund od 1 do 120."),
+    "de": ("Wartezeit auf die Antwort (Sekunden)", "Geben Sie eine ganze Sekundenzahl von 1 bis 120 ein."),
+}
+
+for language, (timeout_label, timeout_error) in TIMEOUT_TRANSLATIONS.items():
+    data = TRANSLATIONS[language]
+    for section, step in (("config", "user"), ("options", "init")):
+        data[section]["step"][step]["data"]["request_timeout"] = timeout_label
+        data[section]["error"]["invalid_request_timeout"] = timeout_error
+
 if __name__ == "__main__":
     (BASE / "translations").mkdir(exist_ok=True)
     for language, data in TRANSLATIONS.items():

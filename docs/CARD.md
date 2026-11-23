@@ -1,4 +1,4 @@
-# Pogoda.by Card — 0.2.2
+# Pogoda.by Card — 0.2.3
 
 [Полная инструкция на русском](CARD.ru.md)
 
@@ -12,7 +12,7 @@ Starting with **integration version 0.2.0**, the card is bundled in `custom_comp
 2. Add a station if this is your first installation. Existing station entries are retained on updates.
 3. Refresh your browser; add **Pogoda.by Card** from the dashboard card picker and select your station.
 
-The integration automatically serves and registers `/pogoda_by/pogoda-by-card.js?v=0.2.2` as a module when resources are managed in storage (the normal UI mode). No separate copy to `www` or second HACS repository is needed. Registration runs once for the whole integration, before station data is fetched. Updates change the resource URL's version without creating duplicates. Adding the card to a dashboard is still a user action.
+The integration automatically serves and registers `/pogoda_by/pogoda-by-card.js?v=0.2.3` as a module when resources are managed in storage (the normal UI mode). No separate copy to `www` or second HACS repository is needed. Registration runs once for the whole integration, before station data is fetched. Updates change the resource URL's version without creating duplicates. Adding the card to a dashboard is still a user action.
 
 Existing manual resource records at `/local/pogoda-by-card.js` (including query strings) are migrated to the bundled URL. Duplicate records at these two known local paths are consolidated; unrelated resources and the old file on disk are retained.
 
@@ -24,7 +24,7 @@ For `lovelace.resource_mode: yaml`, add the following to your existing configura
 lovelace:
   resource_mode: yaml
   resources:
-    - url: /pogoda_by/pogoda-by-card.js?v=0.2.2
+    - url: /pogoda_by/pogoda-by-card.js?v=0.2.3
       type: module
 ```
 

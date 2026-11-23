@@ -13,7 +13,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 
 from .api import PogodaByClient
-from .const import DOMAIN
+from .const import CONF_REQUEST_TIMEOUT, DEFAULT_REQUEST_TIMEOUT, DOMAIN
 from .coordinator import PogodaByCoordinator
 from .dashboard import async_setup_card
 
@@ -37,7 +37,11 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, entry: PogodaByConfigEntry) -> bool:
     """Retry automatically if the first observation cannot be fetched."""
-    coordinator = PogodaByCoordinator(hass, entry, PogodaByClient(async_get_clientsession(hass)))
+    client = PogodaByClient(
+        async_get_clientsession(hass),
+        request_timeout=entry.options.get(CONF_REQUEST_TIMEOUT, DEFAULT_REQUEST_TIMEOUT),
+    )
+    coordinator = PogodaByCoordinator(hass, entry, client)
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

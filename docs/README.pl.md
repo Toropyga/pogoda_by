@@ -1,11 +1,11 @@
-# Pogoda.by dla Home Assistant — 0.2.2
+# Pogoda.by dla Home Assistant
 
 [Русский](README.ru.md) | [English](../README.md) | [Polski](README.pl.md) | [Беларуская](README.be.md) | [Deutsch](README.de.md)
 
 Niestandardowa integracja Home Assistant. Pobiera aktualne obserwacje pogodowe z serwisu Belhydromet przez RSS, a listę krajów i stacji — przez API w formacie JSON. Klucz API nie jest wymagany. Integracja nie udostępnia prognozy pogody.
 
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
-![Version](https://img.shields.io/badge/version-v0.2.2-blue.svg)
+![Version](https://img.shields.io/badge/version-v0.2.3-blue.svg)
 
 > ⚠️ **Ważna uwaga:** Integracja udostępnia pełne informacje dla stacji meteorologicznych **na Białorusi**. Dla stacji w innych krajach informacje są często **niedostępne lub niekompletne**, ponieważ usługa Pogoda.by jest zorientowana przede wszystkim na dane Belhydrometu (Białoruś). Jeśli wybrałeś stację z innego kraju i czujniki wykazują błąd lub stają się niedostępne, jest to spowodowane brakiem dostępu do danych z usługi Pogoda.by.
 
@@ -83,7 +83,7 @@ Obraz źródłowy zapisano jako `assets/pogoda-by-source.png`. Aby ponownie przy
 
 ## Karta na pulpicie
 
-**Pogoda.by Card 0.2.2** jest instalowana i aktualizowana razem z integracją. Podczas instalacji ręcznej skopiuj cały katalog `custom_components/pogoda_by`, łącznie z `frontend`, `brand` i `translations`. Nie jest potrzebne drugie repozytorium karty ani osobne kopiowanie JavaScript do `/config/www`.
+**Pogoda.by Card 0.2.3** jest instalowana i aktualizowana razem z integracją. Podczas instalacji ręcznej skopiuj cały katalog `custom_components/pogoda_by`, łącznie z `frontend`, `brand` i `translations`. Nie jest potrzebne drugie repozytorium karty ani osobne kopiowanie JavaScript do `/config/www`.
 
 Po instalacji lub aktualizacji uruchom ponownie Home Assistant i odśwież przeglądarkę. W edytorze pulpitu wybierz **Dodaj kartę → Pogoda.by Card**, a następnie skonfigurowaną stację. Użytkownik sam umieszcza kartę na wybranym pulpicie; zasób JavaScript jest rejestrowany automatycznie przy standardowym zarządzaniu zasobami w interfejsie.
 
@@ -116,7 +116,7 @@ compact: true
 
 ### Zasoby YAML
 
-Przy **zasobach zarządzanych w YAML** (`lovelace.resource_mode: yaml`) dodaj `/pogoda_by/pogoda-by-card.js?v=0.2.2` z `type: module` do istniejącej listy zasobów, przeładuj zasoby i odśwież przeglądarkę. Pulpit YAML może korzystać z zasobów zarządzanych w interfejsie; o automatycznej rejestracji decyduje tryb zarządzania zasobami.
+Przy **zasobach zarządzanych w YAML** (`lovelace.resource_mode: yaml`) dodaj `/pogoda_by/pogoda-by-card.js?v=0.2.3` z `type: module` do istniejącej listy zasobów, przeładuj zasoby i odśwież przeglądarkę. Pulpit YAML może korzystać z zasobów zarządzanych w interfejsie; o automatycznej rejestracji decyduje tryb zarządzania zasobami.
 
 Dodaj poniższy wpis do `configuration.yaml`, łącząc go z istniejącymi sekcjami `lovelace` i `resources` oraz zachowując pozostałe zasoby:
 
@@ -124,13 +124,13 @@ Dodaj poniższy wpis do `configuration.yaml`, łącząc go z istniejącymi sekcj
 lovelace:
   resource_mode: yaml
   resources:
-    - url: /pogoda_by/pogoda-by-card.js?v=0.2.2
+    - url: /pogoda_by/pogoda-by-card.js?v=0.2.3
       type: module
 ```
 
 Po aktualizacji integracji uruchom ponownie Home Assistant. Po zmianie zasobów YAML wykonaj akcję `lovelace.reload_resources` lub uruchom ponownie Home Assistant. Odśwież przeglądarkę przez **Ctrl+F5** i ponownie otwórz **Dodaj kartę**.
 
-Aby sprawdzić zasób, otwórz `/pogoda_by/pogoda-by-card.js?v=0.2.2` pod adresem swojego Home Assistant. Powinien zostać wyświetlony JavaScript. Przy błędzie **404** sprawdź obecność `/config/custom_components/pogoda_by/frontend/pogoda-by-card.js` oraz poprawne uruchomienie integracji.
+Aby sprawdzić zasób, otwórz `/pogoda_by/pogoda-by-card.js?v=0.2.3` pod adresem swojego Home Assistant. Powinien zostać wyświetlony JavaScript. Przy błędzie **404** sprawdź obecność `/config/custom_components/pogoda_by/frontend/pogoda-by-card.js` oraz poprawne uruchomienie integracji.
 
 Aktualizacja zachowuje skonfigurowane stacje i zmienia URL zasobu karty. W trybie storage poprzedni ręczny wpis `/local/pogoda-by-card.js` jest przenoszony automatycznie, a duplikaty znanych lokalnych adresów karty są scalane. Zmienione identyfikatory entity_id sensorów są obsługiwane.
 
@@ -163,6 +163,8 @@ Każda stacja jest reprezentowana przez osobne urządzenie. Encje mają stałe i
 Domyślny interwał aktualizacji wynosi **1 godzinę (60 minut)**. Przycisk **Konfiguruj** przy wpisie integracji pozwala wybrać od 5 do 180 minut. W każdym cyklu wykonywane jest jedno zapytanie RSS dla wszystkich sensorów danej stacji. Katalog jest pobierany podczas konfiguracji; metadane wybranej stacji są zapisywane we wpisie i nie wymagają ponownego pobierania przy uruchamianiu Home Assistant.
 
 Po aktualizacji wartość domyślna jest stosowana do wpisów bez zapisanego interwału. Jeśli interwał zapisano przez **Konfiguruj**, pozostaje on bez zmian; aby ustawić aktualizację co godzinę, wpisz ręcznie **60**.
+
+Czas oczekiwania na odpowiedź można ustawić podczas dodawania stacji lub później za pomocą przycisku **Konfiguruj**. Limit na pobranie pełnej odpowiedzi wynosi od 1 do 120 sekund, domyślnie 30 sekund. Jeśli pobieranie katalogu przekroczy limit czasu, zwiększ go i spróbuj ponownie.
 
 ## Aktualność obserwacji
 
@@ -213,7 +215,7 @@ logger:
 
 ## Stan weryfikacji tej wersji
 
-Dla wersji 0.2.2 lokalnie przeszło **80 testów Pythona i 26 testów logiki karty**, a także kontrole składni, spójności kluczy tłumaczeń i białych znaków. Testy karty używają minimalnego modelu DOM, a testy koordynatora, sensorów, opcji i rejestracji — atrap API Home Assistant; nie potwierdzają działania w rzeczywistym interfejsie Home Assistant.
+Dla wersji 0.2.3 lokalnie przeszło **82 testów Pythona i 26 testów logiki karty**, a także kontrole składni, spójności kluczy tłumaczeń i białych znaków. Testy karty używają minimalnego modelu DOM, a testy koordynatora, sensorów, opcji i rejestracji — atrap API Home Assistant; nie potwierdzają działania w rzeczywistym interfejsie Home Assistant.
 
 Rzeczywiste odpowiedzi API/RSS, rejestracja zasobu, wykres danych Recorder i wygląd na komputerze oraz telefonie wymagają jeszcze sprawdzenia. Szczegóły po rosyjsku: [stan weryfikacji](../VALIDATION.md). Docelowa minimalna wersja to Home Assistant 2025.1; zgodność podczas rzeczywistego uruchomienia nie została jeszcze potwierdzona.
 

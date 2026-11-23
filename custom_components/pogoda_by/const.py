@@ -2,7 +2,7 @@
 
 DOMAIN = "pogoda_by"
 NAME = "Pogoda.by"
-VERSION = "0.2.2"
+VERSION = "0.2.3"
 CATALOG_URL = "https://pogoda.by/api/v2/weather-fact/all-cities"
 RSS_URL = "https://pogoda.by/rss/weather"
 CONF_COUNTRY = "country"
@@ -17,5 +17,8 @@ MIN_MAX_OBSERVATION_AGE = 1
 MAX_MAX_OBSERVATION_AGE = 168
 # Allow a small clock skew, but never confirm a substantially future observation.
 FUTURE_TOLERANCE_SECONDS = 300
-REQUEST_TIMEOUT = 30
+CONF_REQUEST_TIMEOUT = "request_timeout"
+DEFAULT_REQUEST_TIMEOUT = 30
+MIN_REQUEST_TIMEOUT = 1
+MAX_REQUEST_TIMEOUT = 120
 MAX_RESPONSE_BYTES = 4 * 1024 * 1024

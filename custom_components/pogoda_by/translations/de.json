@@ -6,7 +6,8 @@
         "title": "Land auswählen",
         "description": "Wählen Sie ein Land aus dem aktuellen Pogoda.by-Katalog. Wenn das Laden fehlschlägt, senden Sie das Formular erneut ab, um es noch einmal zu versuchen.",
         "data": {
-          "country": "Land"
+          "country": "Land",
+          "request_timeout": "Wartezeit auf die Antwort (Sekunden)"
         }
       },
       "station": {
@@ -22,7 +23,8 @@
       "invalid_data": "Der Stationskatalog hat ein nicht unterstütztes Format oder ist leer.",
       "no_weather": "Für diese Station sind derzeit keine unterstützten Wetterdaten verfügbar. Versuchen Sie es erneut oder wählen Sie eine andere Station.",
       "invalid_country": "Wählen Sie ein Land aus der Liste.",
-      "invalid_station": "Wählen Sie eine Station aus der Liste."
+      "invalid_station": "Wählen Sie eine Station aus der Liste.",
+      "invalid_request_timeout": "Geben Sie eine ganze Sekundenzahl von 1 bis 120 ein."
     },
     "abort": {
       "already_configured": "Diese Station wurde bereits hinzugefügt."
@@ -35,13 +37,15 @@
         "description": "Ruft in diesem Intervall eine RSS-Antwort pro Station ab. Der Anbieter aktualisiert die Beobachtungen möglicherweise seltener. Das maximale Alter beträgt standardmäßig 6 Stunden; ältere Messwerte und Messwerte ohne Datum sind nicht verfügbar.",
         "data": {
           "update_interval": "Aktualisierungsintervall (Minuten)",
-          "max_observation_age": "Maximales Beobachtungsalter (Stunden)"
+          "max_observation_age": "Maximales Beobachtungsalter (Stunden)",
+          "request_timeout": "Wartezeit auf die Antwort (Sekunden)"
         }
       }
     },
     "error": {
       "invalid_max_observation_age": "Geben Sie eine ganze Stundenzahl von 1 bis 168 ein.",
-      "invalid_interval": "Geben Sie eine ganze Minutenzahl von 5 bis 180 ein."
+      "invalid_interval": "Geben Sie eine ganze Minutenzahl von 5 bis 180 ein.",
+      "invalid_request_timeout": "Geben Sie eine ganze Sekundenzahl von 1 bis 120 ein."
     }
   },
   "entity": {

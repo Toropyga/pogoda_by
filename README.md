@@ -1,11 +1,11 @@
-# Pogoda.by for Home Assistant — 0.2.2
+# Pogoda.by for Home Assistant
 
 [Русский](docs/README.ru.md) | [English](README.md) | [Polski](docs/README.pl.md) | [Беларуская](docs/README.be.md) | [Deutsch](docs/README.de.md)
 
 A custom integration for Home Assistant. Retrieves observed weather from Belhydromet via RSS and the list of countries and stations via a JSON API. No API key is required. Weather forecasts are not provided.
 
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
-![Version](https://img.shields.io/badge/version-v0.2.2-blue.svg)
+![Version](https://img.shields.io/badge/version-v0.2.3-blue.svg)
 
 > ⚠️ **Important note:** The integration provides complete information for weather stations **in Belarus**. For stations in other countries, the information is often **unavailable or incomplete**, as the Pogoda.by service is primarily focused on Belhydromet data (Belarus). If you have selected a station from another country and the sensors show an error or become unavailable, this is due to data unavailability from the Pogoda.by service.
 
@@ -83,7 +83,7 @@ The source image is saved as `assets/pogoda-by-source.png`. To regenerate the re
 
 ## Dashboard card
 
-**Pogoda.by Card 0.2.2** is installed and updated together with the integration. Copy the entire `custom_components/pogoda_by` directory when installing manually, including `frontend`, `brand` and `translations`. A second dashboard repository or a separate copy to `/config/www` is not needed.
+**Pogoda.by Card 0.2.3** is installed and updated together with the integration. Copy the entire `custom_components/pogoda_by` directory when installing manually, including `frontend`, `brand` and `translations`. A second dashboard repository or a separate copy to `/config/www` is not needed.
 
 After installing or updating, restart Home Assistant and refresh the browser. In the dashboard editor, select **Add card → Pogoda.by Card**, then choose a configured station. Adding the card to a particular dashboard remains a user action; registering its JavaScript resource is automatic in the normal UI-managed resource mode.
 
@@ -116,7 +116,7 @@ compact: true
 
 ### YAML-managed resources
 
-With **YAML-managed resources** (`lovelace.resource_mode: yaml`), add `/pogoda_by/pogoda-by-card.js?v=0.2.2` with `type: module` to the existing resource list, then reload resources and refresh the browser. A YAML dashboard can still use UI-managed resources; it is the resource mode that determines whether registration is automatic.
+With **YAML-managed resources** (`lovelace.resource_mode: yaml`), add `/pogoda_by/pogoda-by-card.js?v=0.2.3` with `type: module` to the existing resource list, then reload resources and refresh the browser. A YAML dashboard can still use UI-managed resources; it is the resource mode that determines whether registration is automatic.
 
 Add this to `configuration.yaml`, merging it into the existing `lovelace` and `resources` sections and keeping your other resources:
 
@@ -124,13 +124,13 @@ Add this to `configuration.yaml`, merging it into the existing `lovelace` and `r
 lovelace:
   resource_mode: yaml
   resources:
-    - url: /pogoda_by/pogoda-by-card.js?v=0.2.2
+    - url: /pogoda_by/pogoda-by-card.js?v=0.2.3
       type: module
 ```
 
 Restart Home Assistant after upgrading the integration. After changing YAML resources, run `lovelace.reload_resources` or restart Home Assistant. Refresh the browser with **Ctrl+F5** and reopen **Add card**.
 
-To check the resource, open `/pogoda_by/pogoda-by-card.js?v=0.2.2` under your Home Assistant address. It should return JavaScript. If it returns **404**, check that `/config/custom_components/pogoda_by/frontend/pogoda-by-card.js` exists and that the integration has started.
+To check the resource, open `/pogoda_by/pogoda-by-card.js?v=0.2.3` under your Home Assistant address. It should return JavaScript. If it returns **404**, check that `/config/custom_components/pogoda_by/frontend/pogoda-by-card.js` exists and that the integration has started.
 
 Updates preserve configured stations and update the card resource URL. An existing manual `/local/pogoda-by-card.js` resource is migrated automatically in storage mode; duplicate entries at the known local card paths are consolidated. Renamed sensor entity IDs are supported.
 
@@ -163,6 +163,8 @@ Each station is represented by a separate device. Entities have stable unique_id
 The default update interval is **1 hour (60 minutes)**. Select **Configure** on the integration entry to choose an interval from 5 to 180 minutes. Each cycle uses one RSS request for all sensors at a station. The catalogue is loaded during configuration; the chosen station's metadata is stored in the entry and does not need to be downloaded again when Home Assistant starts.
 
 After an update, the default applies to entries without an explicitly saved interval. If an interval was saved using **Configure**, it is retained; set it to **60** manually for hourly updates.
+
+Set the response timeout when adding a station or later under **Configure**. Each request can wait 1–120 seconds for the full response (default 30 seconds). If the catalogue times out during setup, increase the timeout and submit again.
 
 ## Observation freshness
 
@@ -213,7 +215,7 @@ logger:
 
 ## Validation status of this build
 
-Version 0.2.2 passes **80 Python tests and 26 card logic tests** locally, plus syntax, translation-key consistency and whitespace checks. The card tests use a minimal DOM host and the coordinator, sensor, options and registration tests use Home Assistant API doubles; they do not prove compatibility with a running Home Assistant frontend.
+Version 0.2.3 passes **82 Python tests and 26 card logic tests** locally, plus syntax, translation-key consistency and whitespace checks. The card tests use a minimal DOM host and the coordinator, sensor, options and registration tests use Home Assistant API doubles; they do not prove compatibility with a running Home Assistant frontend.
 
 Live API/RSS responses, actual resource registration, the real Recorder graph and visual rendering on desktop/mobile still need verification. Details: [validation](VALIDATION.md) (in Russian). The target minimum remains Home Assistant 2025.1; runtime compatibility has not yet been confirmed.
 

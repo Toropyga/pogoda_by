@@ -13,11 +13,15 @@ from homeassistant.helpers import selector
 
 from .api import CannotConnect, PogodaByClient
 from .const import (
-    CONF_COUNTRY, CONF_INTERVAL, CONF_MAX_OBSERVATION_AGE, CONF_STATION,
-    DEFAULT_INTERVAL, DEFAULT_MAX_OBSERVATION_AGE, DOMAIN,
-    MAX_INTERVAL, MAX_MAX_OBSERVATION_AGE, MIN_INTERVAL, MIN_MAX_OBSERVATION_AGE,
+    CONF_COUNTRY, CONF_INTERVAL, CONF_MAX_OBSERVATION_AGE, CONF_REQUEST_TIMEOUT, CONF_STATION,
+    DEFAULT_INTERVAL, DEFAULT_MAX_OBSERVATION_AGE, DEFAULT_REQUEST_TIMEOUT, DOMAIN,
+    MAX_INTERVAL, MAX_MAX_OBSERVATION_AGE, MAX_REQUEST_TIMEOUT,
+    MIN_INTERVAL, MIN_MAX_OBSERVATION_AGE, MIN_REQUEST_TIMEOUT,
 )
 from .parser import InvalidData, Station
+
+TIMEOUT_SCHEMA = vol.All(int, vol.Range(min=MIN_REQUEST_TIMEOUT, max=MAX_REQUEST_TIMEOUT))
+
 
 class PogodaByConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Allow multiple stations, while preventing duplicate station entries."""
@@ -27,23 +31,33 @@ class PogodaByConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     def __init__(self) -> None:
         self._catalog: dict[str, dict[str, Station]] | None = None
         self._country: str | None = None
+        self._request_timeout = DEFAULT_REQUEST_TIMEOUT
 
     def _client(self) -> PogodaByClient:
-        return PogodaByClient(async_get_clientsession(self.hass))
+        return PogodaByClient(async_get_clientsession(self.hass), request_timeout=self._request_timeout)
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None):
         errors: dict[str, str] = {}
-        if self._catalog is None:
+        if user_input is not None:
+            timeout = user_input.get(CONF_REQUEST_TIMEOUT, self._request_timeout)
+            if type(timeout) is int and MIN_REQUEST_TIMEOUT <= timeout <= MAX_REQUEST_TIMEOUT:
+                self._request_timeout = timeout
+            else:
+                errors[CONF_REQUEST_TIMEOUT] = "invalid_request_timeout"
+        if self._catalog is None and not errors:
             try:
                 self._catalog = await self._client().async_catalog()
             except CannotConnect:
                 errors["base"] = "cannot_connect"
             except InvalidData:
                 errors["base"] = "invalid_data"
-        if self._catalog is None:
-            # An empty form provides a Submit button to retry catalogue retrieval.
-            return self.async_show_form(step_id="user", data_schema=vol.Schema({}), errors=errors)
-        if user_input is not None and CONF_COUNTRY in user_input:
+        fields = {}
+        if self._catalog is not None:
+            fields[vol.Required(CONF_COUNTRY)] = selector.CountrySelector(
+                selector.CountrySelectorConfig(countries=sorted(self._catalog))
+            )
+        fields[vol.Required(CONF_REQUEST_TIMEOUT, default=self._request_timeout)] = TIMEOUT_SCHEMA
+        if self._catalog is not None and not errors and user_input is not None and CONF_COUNTRY in user_input:
             country = user_input[CONF_COUNTRY]
             if country in self._catalog:
                 self._country = country
@@ -51,9 +65,7 @@ class PogodaByConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors[CONF_COUNTRY] = "invalid_country"
         return self.async_show_form(
             step_id="user",
-            data_schema=vol.Schema({vol.Required(CONF_COUNTRY): selector.CountrySelector(
-                selector.CountrySelectorConfig(countries=sorted(self._catalog))
-            )}),
+            data_schema=vol.Schema(fields),
             errors=errors,
         )
 
@@ -80,6 +92,7 @@ class PogodaByConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     return self.async_create_entry(
                         title=f"{station.name} ({station.country}, {station.station_id})",
                         data=station.as_dict(),
+                        options={CONF_REQUEST_TIMEOUT: self._request_timeout},
                     )
         choices = [
             selector.SelectOptionDict(value=station.station_id, label=f"{station.name} [{station.station_id}]")
@@ -101,20 +114,21 @@ class PogodaByConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class PogodaByOptionsFlow(config_entries.OptionsFlow):
-    """Change polling and observation freshness without editing YAML."""
+    """Configure polling, request timeout and observation freshness."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
         errors: dict[str, str] = {}
         if user_input is not None:
             # Validate submitted values as well as the displayed form schema.
-            # Reject booleans and fractional hours instead of silently truncating.
+            # Reject booleans and fractions instead of silently truncating.
             for key, minimum, maximum in (
                 (CONF_INTERVAL, MIN_INTERVAL, MAX_INTERVAL),
                 (CONF_MAX_OBSERVATION_AGE, MIN_MAX_OBSERVATION_AGE, MAX_MAX_OBSERVATION_AGE),
+                (CONF_REQUEST_TIMEOUT, MIN_REQUEST_TIMEOUT, MAX_REQUEST_TIMEOUT),
             ):
                 value = user_input.get(key)
                 if type(value) is not int or not minimum <= value <= maximum:
-                    errors[key] = "invalid_interval" if key == CONF_INTERVAL else "invalid_max_observation_age"
+                    errors[key] = "invalid_interval" if key == CONF_INTERVAL else f"invalid_{key}"
             if not errors:
                 return self.async_create_entry(title="", data={**self.config_entry.options, **user_input})
         return self.async_show_form(
@@ -125,6 +139,9 @@ class PogodaByOptionsFlow(config_entries.OptionsFlow):
                 vol.Required(CONF_MAX_OBSERVATION_AGE, default=self.config_entry.options.get(
                     CONF_MAX_OBSERVATION_AGE, DEFAULT_MAX_OBSERVATION_AGE,
                 )): vol.All(int, vol.Range(min=MIN_MAX_OBSERVATION_AGE, max=MAX_MAX_OBSERVATION_AGE)),
+                vol.Required(CONF_REQUEST_TIMEOUT, default=self.config_entry.options.get(
+                    CONF_REQUEST_TIMEOUT, DEFAULT_REQUEST_TIMEOUT,
+                )): TIMEOUT_SCHEMA,
             }),
             errors=errors,
         )

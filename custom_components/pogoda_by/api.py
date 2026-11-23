@@ -8,7 +8,7 @@ from typing import Any
 
 import aiohttp
 
-from .const import CATALOG_URL, MAX_RESPONSE_BYTES, REQUEST_TIMEOUT, RSS_URL
+from .const import CATALOG_URL, DEFAULT_REQUEST_TIMEOUT, MAX_RESPONSE_BYTES, RSS_URL
 from .parser import InvalidData, Observation, Station, normalize_catalog, parse_rss
 
 
@@ -19,15 +19,16 @@ class CannotConnect(Exception):
 class PogodaByClient:
     """Use Home Assistant's shared session; do not create or close a session."""
 
-    def __init__(self, session: aiohttp.ClientSession) -> None:
+    def __init__(self, session: aiohttp.ClientSession, *, request_timeout: int = DEFAULT_REQUEST_TIMEOUT) -> None:
         self._session = session
+        self._timeout = aiohttp.ClientTimeout(total=request_timeout)
 
     async def _get(self, url: str, params: dict[str, str] | None = None) -> str:
         try:
             async with self._session.get(
                 url,
                 params=params,
-                timeout=aiohttp.ClientTimeout(total=REQUEST_TIMEOUT),
+                timeout=self._timeout,
                 headers={"Accept": "application/json, application/rss+xml, application/xml, text/xml"},
             ) as response:
                 response.raise_for_status()

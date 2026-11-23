@@ -1,11 +1,11 @@
-# Pogoda.by für Home Assistant — 0.2.2
+# Pogoda.by für Home Assistant
 
 [Русский](README.ru.md) | [English](../README.md) | [Polski](README.pl.md) | [Беларуская](README.be.md) | [Deutsch](README.de.md)
 
 Eine benutzerdefinierte Integration für Home Assistant. Sie ruft die aktuelle Wetterbeobachtung von Belhydromet per RSS ab; die Liste der Länder und Stationen stammt aus einer JSON-API. Es ist kein API-Schlüssel erforderlich. Wettervorhersagen werden nicht bereitgestellt.
 
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
-![Version](https://img.shields.io/badge/version-v0.2.2-blue.svg)
+![Version](https://img.shields.io/badge/version-v0.2.3-blue.svg)
 
 > ⚠️ **Wichtiger Hinweis:** Die Integration liefert vollständige Informationen für Wetterstationen **in Belarus**. Für Stationen in anderen Ländern sind die Informationen oft **nicht verfügbar oder unvollständig**, da der Dienst Pogoda.by in erster Linie auf Daten von Belhydromet (Belarus) ausgerichtet ist. Wenn Sie eine Station aus einem anderen Land ausgewählt haben und die Sensoren einen Fehler anzeigen oder nicht verfügbar werden, liegt dies an der fehlenden Datenverfügbarkeit beim Dienst Pogoda.by.
 
@@ -83,7 +83,7 @@ Das Quellbild ist unter `assets/pogoda-by-source.png` gespeichert. Um die benöt
 
 ## Dashboard-Karte
 
-**Pogoda.by Card 0.2.2** wird zusammen mit der Integration installiert und aktualisiert. Kopieren Sie bei manueller Installation das gesamte Verzeichnis `custom_components/pogoda_by`, einschließlich `frontend`, `brand` und `translations`. Ein zweites Karten-Repository oder eine separate Kopie nach `/config/www` ist nicht erforderlich.
+**Pogoda.by Card 0.2.3** wird zusammen mit der Integration installiert und aktualisiert. Kopieren Sie bei manueller Installation das gesamte Verzeichnis `custom_components/pogoda_by`, einschließlich `frontend`, `brand` und `translations`. Ein zweites Karten-Repository oder eine separate Kopie nach `/config/www` ist nicht erforderlich.
 
 Starten Sie nach Installation oder Aktualisierung Home Assistant neu und aktualisieren Sie die Browserseite. Wählen Sie im Dashboard-Editor **Karte hinzufügen → Pogoda.by Card** und anschließend eine konfigurierte Station. Die Karte platzieren Sie selbst auf dem gewünschten Dashboard; die JavaScript-Ressource wird bei der üblichen Ressourcenverwaltung über die Oberfläche automatisch registriert.
 
@@ -116,7 +116,7 @@ compact: true
 
 ### YAML-Ressourcen
 
-Bei **YAML-verwalteten Ressourcen** (`lovelace.resource_mode: yaml`) ergänzen Sie `/pogoda_by/pogoda-by-card.js?v=0.2.2` mit `type: module` in der vorhandenen Ressourcenliste. Laden Sie danach die Ressourcen und die Browserseite neu. Ein YAML-Dashboard kann Ressourcen aus der Oberfläche verwenden; entscheidend für die automatische Registrierung ist der Ressourcenmodus.
+Bei **YAML-verwalteten Ressourcen** (`lovelace.resource_mode: yaml`) ergänzen Sie `/pogoda_by/pogoda-by-card.js?v=0.2.3` mit `type: module` in der vorhandenen Ressourcenliste. Laden Sie danach die Ressourcen und die Browserseite neu. Ein YAML-Dashboard kann Ressourcen aus der Oberfläche verwenden; entscheidend für die automatische Registrierung ist der Ressourcenmodus.
 
 Ergänzen Sie Folgendes in `configuration.yaml`. Führen Sie es mit den vorhandenen Abschnitten `lovelace` und `resources` zusammen und behalten Sie andere Ressourcen bei:
 
@@ -124,13 +124,13 @@ Ergänzen Sie Folgendes in `configuration.yaml`. Führen Sie es mit den vorhande
 lovelace:
   resource_mode: yaml
   resources:
-    - url: /pogoda_by/pogoda-by-card.js?v=0.2.2
+    - url: /pogoda_by/pogoda-by-card.js?v=0.2.3
       type: module
 ```
 
 Starten Sie Home Assistant nach einer Aktualisierung der Integration neu. Nach Änderungen an YAML-Ressourcen führen Sie die Aktion `lovelace.reload_resources` aus oder starten Home Assistant neu. Aktualisieren Sie den Browser mit **Strg+F5** und öffnen Sie **Karte hinzufügen** erneut.
 
-Öffnen Sie zur Prüfung `/pogoda_by/pogoda-by-card.js?v=0.2.2` unter der Adresse Ihres Home Assistant. JavaScript sollte angezeigt werden. Prüfen Sie bei **404**, ob `/config/custom_components/pogoda_by/frontend/pogoda-by-card.js` vorhanden ist und die Integration erfolgreich gestartet wurde.
+Öffnen Sie zur Prüfung `/pogoda_by/pogoda-by-card.js?v=0.2.3` unter der Adresse Ihres Home Assistant. JavaScript sollte angezeigt werden. Prüfen Sie bei **404**, ob `/config/custom_components/pogoda_by/frontend/pogoda-by-card.js` vorhanden ist und die Integration erfolgreich gestartet wurde.
 
 Aktualisierungen erhalten konfigurierte Stationen und aktualisieren die Ressourcen-URL. Ein vorhandener manueller Eintrag `/local/pogoda-by-card.js` wird im Storage-Modus automatisch migriert; doppelte Einträge an den bekannten lokalen Kartenpfaden werden zusammengeführt. Umbenannte entity_id-Werte der Sensoren werden unterstützt.
 
@@ -163,6 +163,8 @@ Jede Station wird durch ein eigenes Gerät dargestellt. Entitäten haben stabile
 Das Standard-Aktualisierungsintervall beträgt **1 Stunde (60 Minuten)**. Über **Konfigurieren** am Integrationseintrag lässt sich ein Intervall von 5 bis 180 Minuten wählen. Pro Zyklus wird eine RSS-Anfrage für alle Sensoren einer Station durchgeführt. Der Katalog wird während der Konfiguration geladen; die Metadaten der gewählten Station werden im Eintrag gespeichert und müssen beim Start von Home Assistant nicht erneut heruntergeladen werden.
 
 Nach einem Update gilt der Standardwert für Einträge ohne explizit gespeichertes Intervall. Wurde ein Intervall über **Konfigurieren** gespeichert, bleibt es erhalten; setzen Sie es für eine stündliche Aktualisierung manuell auf **60**.
+
+Die Wartezeit lässt sich beim Hinzufügen einer Station oder später über **Konfigurieren** einstellen. Für den Empfang der vollständigen Antwort sind pro Anfrage 1 bis 120 Sekunden möglich (Standard 30 Sekunden). Läuft die Zeit beim Laden des Katalogs ab, erhöhen Sie den Wert und versuchen Sie es erneut.
 
 ## Aktualität der Beobachtung
 
@@ -213,7 +215,7 @@ logger:
 
 ## Prüfstatus dieser Version
 
-Für Version 0.2.2 bestehen lokal **80 Python-Tests und 26 Tests der Kartenlogik** sowie Prüfungen von Syntax, Übersetzungsschlüsseln und Leerzeichen. Die Kartentests verwenden einen minimalen DOM-Ersatz, die Koordinator-, Sensor-, Options- und Registrierungstests Nachbildungen der Home-Assistant-APIs; damit ist die Funktion im tatsächlichen Frontend noch nicht nachgewiesen.
+Für Version 0.2.3 bestehen lokal **82 Python-Tests und 26 Tests der Kartenlogik** sowie Prüfungen von Syntax, Übersetzungsschlüsseln und Leerzeichen. Die Kartentests verwenden einen minimalen DOM-Ersatz, die Koordinator-, Sensor-, Options- und Registrierungstests Nachbildungen der Home-Assistant-APIs; damit ist die Funktion im tatsächlichen Frontend noch nicht nachgewiesen.
 
 Echte API/RSS-Antworten, Ressourcenregistrierung, Recorder-Verlaufsdiagramm und Darstellung auf Computer und Mobilgerät müssen noch geprüft werden. Einzelheiten auf Russisch: [Prüfstatus](../VALIDATION.md). Die angestrebte Mindestversion bleibt Home Assistant 2025.1; die tatsächliche Laufzeitkompatibilität ist noch nicht bestätigt.
 

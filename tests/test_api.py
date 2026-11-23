@@ -119,7 +119,8 @@ class ApiTests(unittest.TestCase):
     async def test_only_selected_station_requested(self):
         body = '<rss><channel><item><description>Температура 0°C</description></item></channel></rss>'
         session = Session(Response(body.encode()))
-        result = await api.PogodaByClient(session).async_observation("26851")
+        result = await api.PogodaByClient(session, request_timeout=75).async_observation("26851")
+        self.assertEqual(session.calls[0][1]["timeout"].total, 75)
         self.assertEqual(session.calls[0][1]["params"], {"station": "26851"})
         self.assertEqual(result.values["temperature"], 0)
 

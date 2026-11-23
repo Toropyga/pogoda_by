@@ -6,7 +6,8 @@
         "title": "Wybierz kraj",
         "description": "Wybierz kraj z katalogu Pogoda.by. Jeśli pobieranie się nie powiedzie, wyślij formularz ponownie.",
         "data": {
-          "country": "Kraj"
+          "country": "Kraj",
+          "request_timeout": "Czas oczekiwania na odpowiedź (sekundy)"
         }
       },
       "station": {
@@ -22,7 +23,8 @@
       "invalid_data": "Katalog stacji jest pusty lub ma nieobsługiwany format.",
       "no_weather": "Stacja nie udostępnia teraz obsługiwanych danych pogodowych. Spróbuj ponownie lub wybierz inną stację.",
       "invalid_country": "Wybierz kraj z listy.",
-      "invalid_station": "Wybierz stację z listy."
+      "invalid_station": "Wybierz stację z listy.",
+      "invalid_request_timeout": "Wpisz całkowitą liczbę sekund od 1 do 120."
     },
     "abort": {
       "already_configured": "Ta stacja została już dodana."
@@ -35,13 +37,15 @@
         "description": "Dane pogodowe są pobierane jednym zapytaniem RSS dla każdej stacji. Stacja może publikować nowe pomiary rzadziej. Domyślny dopuszczalny wiek to 6 godzin; starsze pomiary oraz pomiary bez daty są niedostępne.",
         "data": {
           "update_interval": "Interwał aktualizacji (minuty)",
-          "max_observation_age": "Dopuszczalny wiek obserwacji (godziny)"
+          "max_observation_age": "Dopuszczalny wiek obserwacji (godziny)",
+          "request_timeout": "Czas oczekiwania na odpowiedź (sekundy)"
         }
       }
     },
     "error": {
       "invalid_max_observation_age": "Wpisz całkowitą liczbę godzin od 1 do 168.",
-      "invalid_interval": "Wpisz całkowitą liczbę minut od 5 do 180."
+      "invalid_interval": "Wpisz całkowitą liczbę minut od 5 do 180.",
+      "invalid_request_timeout": "Wpisz całkowitą liczbę sekund od 1 do 120."
     }
   },
   "entity": {
