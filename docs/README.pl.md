@@ -7,7 +7,7 @@ Niestandardowa integracja Home Assistant. Pobiera aktualne obserwacje pogodowe z
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 ![Version](https://img.shields.io/badge/version-v0.2.3-blue.svg)
 
-> ⚠️ **Ważna uwaga:** Integracja udostępnia pełne informacje dla stacji meteorologicznych **na Białorusi**. Dla stacji w innych krajach informacje są często **niedostępne lub niekompletne**, ponieważ usługa Pogoda.by jest zorientowana przede wszystkim na dane Belhydrometu (Białoruś). Jeśli wybrałeś stację z innego kraju i czujniki wykazują błąd lub stają się niedostępne, jest to spowodowane brakiem dostępu do danych z usługi Pogoda.by.
+> **Integracja jest przeznaczona wyłącznie dla stacji meteorologicznych na Białorusi.** Stacje w innych krajach również mogą działać, ale ich obsługa nie jest gwarantowana. Listę krajów i stacji oraz dane pomiarowe udostępnia serwis Pogoda.by. Autor integracji nie ponosi odpowiedzialności za dane udostępniane przez ten serwis.
 
 ## Instalacja przez Marketplace / HACS
 

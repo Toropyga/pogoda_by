@@ -7,7 +7,7 @@ Eine benutzerdefinierte Integration für Home Assistant. Sie ruft die aktuelle W
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 ![Version](https://img.shields.io/badge/version-v0.2.3-blue.svg)
 
-> ⚠️ **Wichtiger Hinweis:** Die Integration liefert vollständige Informationen für Wetterstationen **in Belarus**. Für Stationen in anderen Ländern sind die Informationen oft **nicht verfügbar oder unvollständig**, da der Dienst Pogoda.by in erster Linie auf Daten von Belhydromet (Belarus) ausgerichtet ist. Wenn Sie eine Station aus einem anderen Land ausgewählt haben und die Sensoren einen Fehler anzeigen oder nicht verfügbar werden, liegt dies an der fehlenden Datenverfügbarkeit beim Dienst Pogoda.by.
+> **Die Integration ist ausschließlich für Wetterstationen in Belarus vorgesehen.** Stationen in anderen Ländern können ebenfalls funktionieren. Ihre Unterstützung ist jedoch nicht garantiert. Pogoda.by stellt die Liste der Länder und Wetterstationen sowie die Beobachtungsdaten bereit. Der Autor der Integration übernimmt keine Verantwortung für die von Pogoda.by bereitgestellten Daten.
 
 ## Installation über Marketplace / HACS
 

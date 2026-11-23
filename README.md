@@ -7,7 +7,7 @@ A custom integration for Home Assistant. Retrieves observed weather from Belhydr
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 ![Version](https://img.shields.io/badge/version-v0.2.3-blue.svg)
 
-> ⚠️ **Important note:** The integration provides complete information for weather stations **in Belarus**. For stations in other countries, the information is often **unavailable or incomplete**, as the Pogoda.by service is primarily focused on Belhydromet data (Belarus). If you have selected a station from another country and the sensors show an error or become unavailable, this is due to data unavailability from the Pogoda.by service.
+> **This integration supports only weather stations in Belarus.** Stations in other countries may also work, but support for them is not guaranteed. Pogoda.by provides the list of countries and stations and the weather observations. The integration author assumes no responsibility for the data supplied by Pogoda.by.
 
 ## Installation with Marketplace / HACS
 
